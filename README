@@ -1,0 +1,27 @@
+Types of tokens:
+int
+str
+op
+id
+boolean
+newl
+null
+bool
+
+Grammer:
+
+id := (user_defined)
+op := :|=|+|-|*|/| DONE
+newl := "\n" DONE
+num := 0|1|2|3|4|5|6|7|8|9 DONE
+bool := FALSE|TRUE DONE
+str := regex("('.*.?')") // Anything inside of '' DONE
+
+func := print|
+print := : id|num|bool|str|none newl DONE (can be expanded on later)
+assign := id = id|num|bool|str newl
+
+math := RICHMOND
+
+
+TODO: evaluate math expressions on one line
