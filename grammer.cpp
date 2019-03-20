@@ -3,10 +3,43 @@
 #include <iostream>
 #include "lexer.h"
 #include <stdlib.h>
+#include <string>
 
 string check_math(lexer &token_list) {
     // TODO: RICHMOND
-    
+    return "0"; // just for now so stuff compiles
+}
+
+// Continually appends chains of strings together into a single string
+string check_string(lexer &token_list) {
+    string final;
+    // Continually read in strings until we reach and endl
+    while(token_list.next().first != "newl") {
+        if(token_list.next().first != "string") {
+            cout << "Error in check_string: Only strings can be used here" << endl;
+            cout << "Maybe you tried to chain some strings together halfway through a line?" << endl;
+            exit(EXIT_FAILURE);
+        }
+        // Create the next string to insert into the final string
+        string next = token_list.next().second;
+
+        // Format the string, remove the first and last " characters to make chaining easier
+        next = next.substr(1, next.size() - 2);
+
+        // Add the string chains up
+        final += next + " ";
+
+        // Pop out the next item
+        token_list.pop();
+    }
+    // Pop out the newl character
+    token_list.pop();
+
+    // Remove the extra space at the end
+    final.pop_back();
+
+    // Readd the starting and ending " characters
+    return '"' + final + '"';
 }
 
 string check_assign(lexer &token_list) {
@@ -30,25 +63,23 @@ string check_assign(lexer &token_list) {
     // Pop the assignement operator
     token_list.pop();
 
-    while(token_list.next().first != "newl") {
-        if(token_list.next().first == "int") {
-            // TODO: evaulate integer expression
-            final += "bruh";
-        }
-        else if(token_list.next().first == "string") {
-            // Add the string to the assignment
-            final += "string " + id + " = " + token_list.next().second;
-            // Pop the string off of the queue
-            token_list.pop();
-        }
-        else {
-            cout << token_list.next().first << endl;
-            cout << "Error: Assigning to an invalid token (must be int or string)" << endl;
-            exit(EXIT_FAILURE);
-        }
+    if(token_list.next().first == "int") {
+        // Add the type and the name to the final string
+        final = "int " + id + " = ";
+        // TODO: evaulate integer expression
+        final += check_math(token_list);
     }
-    // Pop out the newline character
-    token_list.pop();
+    else if(token_list.next().first == "string") {
+        // Add the type and the name to the final string
+        final = "string " + id + " = ";
+        // Add the string to the assignment
+        final += check_string(token_list);
+    }
+    else {
+        cout << token_list.next().first << endl;
+        cout << "Error: Assigning to an invalid token (must be int or string)" << endl;
+        exit(EXIT_FAILURE);
+    }
     return final;
 }
 string check_print(lexer &token_list) {
@@ -65,6 +96,7 @@ string check_print(lexer &token_list) {
     }
     // Pop out the : token
     token_list.pop();
+
     while(token_list.next().first != "newl") {
         if(token_list.next().second == "print") {
             cout << "Error: Nested print statements are illegal." << endl;
@@ -92,6 +124,6 @@ int main() {
 
     token_test = tokenize_file("test.p");
     while(true) {
-    cout << check_assign(token_test) << endl;
-}
+        cout << check_assign(token_test) << endl;
+    }
 }

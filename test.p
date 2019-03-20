@@ -1,3 +1,6 @@
+string = 'test' 'test1' 'test2' 
+
+
 integer = 1
 integer = 2
 
