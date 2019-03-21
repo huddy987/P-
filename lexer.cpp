@@ -30,6 +30,10 @@ string lexer::determine_type(string value) {
     if(func.find(value) != func.end()) {
         return "func";
     }
+    // Check if it is a binary operator
+    else if(bin_op.find(value) != bin_op.end()) {
+        return "bin_op";
+    }
     // Check if it is an operator
     else if (op.find(value) != op.end()) {
         return "op";

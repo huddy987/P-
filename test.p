@@ -1,13 +1,13 @@
-string = 'test' 'test1' 'test2' 
+hudson = 'test' 'test1' 'test2'
+hudson = 'hmm'
 
-
-integer = 1
-integer = 2
+richmond = 1 + 2 * 3 * 5
+richmond = 2
 
 print : 'Hello' 'Hello2' 'hello3'
-
+print : 'next'
 # Integers can be added to a vector like list
-integer = 1
+richmond = 1
 
 # Strings can either be singular, or in a vector like list
 string = 'c'

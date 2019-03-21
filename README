@@ -25,3 +25,4 @@ math := RICHMOND
 
 
 TODO: evaluate math expressions on one line
+TODO: Custom hash function for unordered_map<pair>
