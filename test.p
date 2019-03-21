@@ -4,7 +4,7 @@ hudson = 'hmm'
 richmond = 1 + 2 * 3 * 5
 richmond = 2
 
-print : 'Hello' 'Hello2' 'hello3'
+print : 'Hello' 'Hello2' 'hello3' hudson
 print : 'next'
 # Integers can be added to a vector like list
 richmond = 1

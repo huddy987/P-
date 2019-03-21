@@ -49,9 +49,12 @@ string Parser::check_string() {
     // Continually read in strings until we reach and endl
     while(token_list.next().first != "newl") {
         if(token_list.next().first != "string") {
-            cout << token_list.next().second << endl;
-            cout << "Error in check_string: Only type 'string' can be chained together" << endl;
-            exit(EXIT_FAILURE);
+            // Remove the extra space at the end
+            final.pop_back();
+            // Readd the starting and ending " characters
+            return '"' + final + '"';
+            // Return since the next symbol is not a string so we can't concatonate
+            return final;
         }
         // Create the next string to insert into the final string
         string next = token_list.next().second;
@@ -65,8 +68,6 @@ string Parser::check_string() {
         // Pop out the next item
         token_list.pop();
     }
-    // Pop out the newl character
-    token_list.pop();
 
     // Remove the extra space at the end
     final.pop_back();
@@ -148,19 +149,29 @@ string Parser::check_print() {
     // Pop out the : token
     token_list.pop();
 
-    if(token_list.next().second == "print") {
-        cout << "Error: Nested print statements are illegal." << endl;
-        exit(EXIT_FAILURE);
-    }
+    while(token_list.next().first != "newl") {
+        if(token_list.next().second == "print") {
+            cout << "Error: Nested print statements are illegal." << endl;
+            exit(EXIT_FAILURE);
+        }
 
-    else if(token_list.next().first == "string") {
-        // Add the string to the print statement
-        final += " << " + check_string();
+        else if(token_list.next().first == "string") {
+            // Add the string to the print statement
+            final += " << " + check_string();
+        }
+        else if(token_list.next().first == "int") {
+            // Add the integer to the print statement
+        }
+        // If it is an id, and it is defined already, then add this to the print statement
+        else if(token_list.next().first == "id" && this->find_id(token_list.next().second, "string")) {
+            // Add the id to the final string
+            final += " << " + token_list.next().second;
+            // Pop the id out of the queue
+            token_list.pop();
+        }
     }
-    else if(token_list.next().first == "int") {
-        // Add the integer to the print statement
-    }
-    //else if(token_list.next().first == "id" && this
+    // Pop out the newl character
+    token_list.pop();
 
     final += " << endl;";
     return final;
