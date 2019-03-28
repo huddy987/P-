@@ -5,8 +5,13 @@
 #include <iostream>
 #include <bits/stdc++.h>
 #include <cassert>
+#include <utility>
 
 using namespace std;
+
+
+typedef vector<string> VS;
+typedef unordered_set<string> USS;
 
 // this splices a string by whitespace
 // returns a vector where each element is a "word" in the string
@@ -15,11 +20,11 @@ using namespace std;
  * Output - split: a vector string of line separated by whitespace
  *
  */
-vector<string> splicer(string line) {
+VS splicer(string line) {
   string buf;                 // Have a buffer string
   stringstream ss(line);       // Insert the string into a stream
 
-  vector<string> split;  // Create vector to hold our words
+  VS split;  // Create vector to hold our words
 
   while (ss >> buf)
         split.push_back(buf);
@@ -30,9 +35,9 @@ vector<string> splicer(string line) {
 // separates the vector by "|"
 // ignores the first two elements
 // this assums that the proper format is followed
-vector<string> productionSplit(vector<string> line) {
+VS productionSplit(VS line) {
     int bro = 0;
-    vector<string> production;
+    VS production;
     string holder = "";
 
     if (line.size() == 3) {
@@ -71,29 +76,34 @@ vector<string> productionSplit(vector<string> line) {
     return production;
 }
 
+// returns true if the argument is a capital letter
+// false otherwise
+bool isCapital(char letter) {
+    if ('A' <= letter && letter <= 'Z') return true;
+    return false;
+}
+
+// this function checks if the given production rule for
+// any non terminal follows the CNF form
+bool CNFvalid(string production) {
+    VS split = splicer(production);
+    if (split.size() == 2) {
+        if (isCapital(split[0][0]) && isCapital(split[0][0])) return true;
+    } else if (split.size() == 1) {
+        if (!isCapital(split[0][0])) return true;
+    }
+    return false;
+}
 
 // prints a vector separated by whitespace
 // doesn't print an endline though
-void printVec(vector<string> stuff) {
+void printVec(VS stuff) {
     for (int i=0; i<stuff.size(); i++) {
-        cout << stuff[i] << i <<  " ";
+        cout << stuff[i] << i <<  endl;
     } cout << endl;
 }
 
-// order matters
-vector<string> getCartesianProduct(string one, string two) {
-    vector<string> product;
-    string first, second;
-    first = second = "";
-    for (auto x: one) {
-        first = x;
-        for (auto y: two) {
-            second = y ;
-            product.push_back(first + second);
-        }
-    }
-    return product;
-}
+
 
 // this checks if the string is a number or not
 // it works
@@ -107,20 +117,13 @@ bool isThisNum(string line) {
     return true;
 }
 
-// key is the nonterminal capital letter
-// value is the set of allowed syntax
-unordered_map<string, unordered_set<string>> grammar;
-// this is the set of non terminals
-unordered_set<string> nonTerminals;
-unordered_set<string> terminals;
-
 // takes in input from terminal
 // the key: "nonterminals" is a set of the non-terminals
-unordered_map<string, unordered_set<string>> makeGrammar() {
+unordered_map<string, USS> makeGrammar() {
 
-    unordered_map<string, unordered_set<string>> grammar;
+    unordered_map<string, USS> grammar;
     string holder;
-    vector<string> stringVec, stringy;
+    VS stringVec, stringy;
 
     while (holder != "Q") {
         // cout << "Input: ";
@@ -128,9 +131,10 @@ unordered_map<string, unordered_set<string>> makeGrammar() {
         stringVec = splicer(holder);
         // printVec(stringVec);
         // "//" is how we comment the conn
+        if (stringVec.empty()) continue;
         if (stringVec[0] == "//") continue;
         for (int i=0; i < stringVec.size(); i++) {
-            if ('a' <= (stringVec[i])[0] && (stringVec[i])[0] <= 'z') {
+            if (!(isCapital(stringVec[i][0])) && stringVec[i] != "|") {
                 grammar["terminals"].insert(stringVec[i]);
             }
         }
@@ -140,7 +144,8 @@ unordered_map<string, unordered_set<string>> makeGrammar() {
         assert(stringVec[0] == "N" | stringVec[0] == "//" | stringVec[0] == "Q");
 
         for (int i=0; i < stringy.size(); i++) {
-            // put them in the set described by 
+            // put them in the set described by
+            assert(CNFvalid(stringy[i]));
             grammar[stringVec[1]].insert(stringy[i]);
         }
 
@@ -149,13 +154,14 @@ unordered_map<string, unordered_set<string>> makeGrammar() {
     return grammar;
 }
 
-bool thisStringInThisSet(string part, unordered_set<string> readySet) {
+bool thisStringInThisSet(string part, USS readySet) {
     if (readySet.find(part) != readySet.end()) return true;
     return false;
 }
 
 // just prints the structure of the grammar to terminal
-void printGrammar(unordered_map<string, unordered_set<string>> grammar) {
+// returns how many nonterminals there are
+int printGrammar(unordered_map<string, USS> grammar) {
     ////////////////////////// PRINT THE GRAMMAR //////////////////////////////////
     int bro = 0;
     cout << endl;
@@ -170,27 +176,172 @@ void printGrammar(unordered_map<string, unordered_set<string>> grammar) {
     // print the terminals and the non terminals
     cout << "nonterminals: ";
     for (auto y: grammar["nonterminals"]) {
-            cout << y << " | ";
+            cout << y << " ";
     } cout << endl << "terminals: ";
     for (auto y: grammar["terminals"]) {
-            cout << y << " | ";
+            cout << y << " ";
     } cout << endl;
     cout << "Number of Non-Terminals: " << bro << endl;
     ////////////////////////// PRINT THE GRAMMAR //////////////////////////////////
 }
 
+// order is important
+// AB x CD = AC, AD, BC, BD
+VS cartesianProduct(USS first, USS second) {
+    VS product;
+    string holder;
+    if (first.empty() || second.empty()) return product;
+    for (auto x: first) {
+        for (auto y: second) {
+            // concatenate them
+            holder = x + " " + y;
+            // then put into the vector
+            product.push_back(holder);
+            // I do this just in case
+            holder = "";
+        }
+    }
+    return product;
+}
+
+void printUSS(USS stringSet) {
+    for (auto x: stringSet) {
+        cout << x <<  " ";
+    }
+}
+
+// http://pages.cs.wisc.edu/~agorenst/cyk.pdf
+// https://www.cs.bgu.ac.il/~michaluz/seminar/CKY1.pdf
+bool CYK(string line, unordered_map<string, USS> & grammar) {
+    VS split = splicer(line);
+    if (split.empty()) {
+        return false;
+    }
+    int n = split.size();
+    // row first; column second
+    USS CYK[n][n];
+
+    // this populates the principal row
+    for (int i=0; i<n ; i++) {
+        for (auto x: grammar) {
+            if (thisStringInThisSet(split[i], grammar[x.first])) {
+                // cout << split[i] << " " << x.first << endl;
+                CYK[0][i].insert(x.first);
+            }
+        }
+    }
+/*
+    cout << endl;
+    for (int i=0; i<n;i++) {
+        cout << split[i] << ": ";
+        printUSS(CYK[0][i]);cout << endl;
+    } cout << endl;
+*/
+    pair<int,int> right, left;
+    // triple for loops FTW
+    for (int r=1; r<n; r++) {
+        // cout << "out-" << r << ":\n";
+        for (int j=0; j < n-r; j++){
+            // cout << "j: "<< j << endl;
+            // first is row, second is column
+            left.first = 0; left.second = j;
+            right.first = r-1; right.second = j+1;
+            // cout << "start values: "; cout << left.first  << left.second << " " << right.first<< right.second << endl;
+            for (int t=0; t<r; t++) {
+                // do what needs to be done up here
+                // before the pairs values are changed
+                // cout << left.first  << left.second << " " << right.first<< right.second << endl;
+                USS L = CYK[left.first][left.second];
+                USS R = CYK[right.first][right.second];
+                VS product = cartesianProduct(L,R);
+
+                for (auto couple: product) {
+                    for (auto nonterm: grammar) {
+                        if(thisStringInThisSet(couple, grammar[nonterm.first])) {
+                            CYK[r][j].insert(nonterm.first);
+                        }
+                    }
+                }
+                left.first += 1; right.first -= 1; right.second+= 1;
+            }
+        }
+    }
+
+
+
+/*
+    for (int l=1; l<n; l++) {
+        cout << "Main For Loop Start: " <<  l << endl;
+        // this is the main one
+        for (int r=0; r<l;r++) {
+            // first is row, second is column
+            left.first = l; left.second = r;
+            right.first = l-1; right.second = r+1;
+
+            for (int t=0; t<l; t++) {
+                left.first++; right.first--; right.second++;
+                cout << "left: " << left.first << " " << left.second;
+                cout << " right: " << right.first << " " << right.second << endl;
+
+                // cout << "l- " << l << " r- " << r << " t- " << t << endl;
+
+                printUSS(L); cout << " |||| "; printUSS(R); cout << endl;
+                // create the cartesian product of 
+                VS pairs = cartesianProduct(L,R);
+
+
+                for (auto couple: pairs) {
+                    for (auto nonterm: grammar) {
+                        if(thisStringInThisSet(couple, grammar[nonterm.first])) {
+                            CYK[r][r+l].insert(nonterm.first);
+                        }
+                    }
+                }
+
+            }
+        }
+        cout << endl;
+    }
+*/
+    // cout << "Final Set: "; printUSS(CYK[n-1][0]);
+    if (thisStringInThisSet("S0",CYK[n-1][0])){
+        return true;
+    }
+    return false;
+}
+
+// this takes in the tests from grammarRules.txt
+void testFunc(unordered_map<string, USS> & grammar) {
+    string bruh; bool hold; VS split;
+    while (true) {
+        getline(cin, bruh);
+        if (bruh == "Stop") return;
+        split = splicer(bruh);
+        if (split.empty()) continue;
+        if (split[0] == "//") continue;
+
+        cout << bruh << ": ";
+        if (CYK(bruh,grammar)) {
+            cout << "valid" << endl;
+        } else {
+            cout << "invalid" << endl;
+        }
+    }
+}
+
+
 
 int main() {  
-    
+    cout << endl;
     // makeGrammar creates a map
     // the key is the non terminal
     // the value is an unordered set of strings
     //      of the allowed productions
     // The grammar inputted is assumed to be in Chomsky Normal Form
-    unordered_map<string, unordered_set<string>> grammar = makeGrammar();
-    printGrammar(grammar);
-    
-    
+    unordered_map<string, USS> grammar = makeGrammar();
+    testFunc(grammar);
+    // int F = printGrammar(grammar);
 
+    cout << "The End" << endl << endl;
     return 0;
 }
