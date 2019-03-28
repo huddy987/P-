@@ -46,4 +46,6 @@ unordered_map<string, unordered_set<string>> makeGrammar();
 // returns true if string in the set
 bool thisStringInThisSet(string part, unordered_set<string> & readySet);
 
+bool CYK(string analyze, unordered_map<string,const unordered_set<string>> & grammar)
+
 #endif

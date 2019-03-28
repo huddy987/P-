@@ -1,8 +1,10 @@
-// Name: Hudson Shykowski & Dale Richmond Naviza
-// ID : 1520045 & 1534579
-// CMPUT 275, Winter 2019
-
-#include "grammar.h"
+#include <unordered_set>
+#include <unordered_map>
+#include <vector>
+#include <string>
+#include <iostream>
+#include <bits/stdc++.h>
+#include <cassert>
 
 using namespace std;
 
@@ -147,11 +149,35 @@ unordered_map<string, unordered_set<string>> makeGrammar() {
     return grammar;
 }
 
-bool thisStringInThisSet(string part, unordered_set<string> & readySet) {
+bool thisStringInThisSet(string part, unordered_set<string> readySet) {
     if (readySet.find(part) != readySet.end()) return true;
     return false;
 }
 
+// just prints the structure of the grammar to terminal
+void printGrammar(unordered_map<string, unordered_set<string>> grammar) {
+    ////////////////////////// PRINT THE GRAMMAR //////////////////////////////////
+    int bro = 0;
+    cout << endl;
+    for (auto x: grammar) {
+        if (x.first == "nonterminals" || x.first == "terminals") continue;
+        bro++;
+        cout << x.first << " --> ";
+        for (auto y: grammar[x.first]) {
+            cout << y << " | ";
+        } cout << endl;
+    } cout << endl;
+    // print the terminals and the non terminals
+    cout << "nonterminals: ";
+    for (auto y: grammar["nonterminals"]) {
+            cout << y << " | ";
+    } cout << endl << "terminals: ";
+    for (auto y: grammar["terminals"]) {
+            cout << y << " | ";
+    } cout << endl;
+    cout << "Number of Non-Terminals: " << bro << endl;
+    ////////////////////////// PRINT THE GRAMMAR //////////////////////////////////
+}
 
 
 int main() {  
@@ -162,18 +188,9 @@ int main() {
     //      of the allowed productions
     // The grammar inputted is assumed to be in Chomsky Normal Form
     unordered_map<string, unordered_set<string>> grammar = makeGrammar();
+    printGrammar(grammar);
     
-    int bro = 0;
-    cout << endl;
-    for (auto x: grammar) {
-        bro++;
-        if (x.first == "nonterminals" || x.first == "terminals") continue;
-        cout << x.first << " --> ";
-        for (auto y: grammar[x.first]) {
-            cout << y << " | ";
-        } cout << endl;
-    }
-    cout << endl << "Number of Non-Terminals: " << bro - 2 << endl;
+    
 
     return 0;
 }
