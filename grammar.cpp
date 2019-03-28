@@ -1,10 +1,8 @@
-#include <unordered_set>
-#include <unordered_map>
-#include <vector>
-#include <string>
-#include <iostream>
-#include <bits/stdc++.h>
-#include <cassert>
+// Name: Hudson Shykowski & Dale Richmond Naviza
+// ID : 1520045 & 1534579
+// CMPUT 275, Winter 2019
+
+#include "grammar.h"
 
 using namespace std;
 
@@ -149,7 +147,7 @@ unordered_map<string, unordered_set<string>> makeGrammar() {
     return grammar;
 }
 
-bool thisStringInThisSet(string part, unordered_set<string> readySet) {
+bool thisStringInThisSet(string part, unordered_set<string> & readySet) {
     if (readySet.find(part) != readySet.end()) return true;
     return false;
 }
