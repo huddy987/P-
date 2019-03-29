@@ -1,0 +1,45 @@
+// ALLOWED: two non-terminals together or one terminal
+// Current limitations: Identifiers are treated as their own type: they
+// cannot be used in integer expressions or string expressions
+
+
+// Start Grammar
+N Start SFunction SArgument | IFunction IArgument | Identifier Assignment
+
+
+// String function grammar
+// ==================================================
+//
+
+N SFunction Print SFunctionArgument
+N SFuncionArgument Delimiter SArgument
+N Print print
+
+//
+// ==================================================
+//
+
+
+// Assignment grammar
+N Assignment Equality SArgument | Equality IArgument | Equality Identifier
+
+
+// General non-terminal grammar
+// ==================================================
+//
+
+// String Argument
+N SArgument SArgument SArgument | string
+
+// Integer Argument
+N IArgument arg
+
+//
+// ==================================================
+//
+
+// General terminal grammar
+N Delimiter  :
+N Identifier identifier
+N Equality =
+Q

@@ -27,7 +27,7 @@ bool Parser::find_id(string id, string type) {
 }
 
 void Parser::read_until_newl() {
-    while(token_list.next().first != "newl") {
+    while(token_list.next().first != "Newl") {
         token_list.pop();
     }
     // Pop out the newline character
@@ -43,12 +43,12 @@ string Parser::check_math() {
 string Parser::check_string() {
     string final;
     // Check if the input is even a string to begin with
-    if(token_list.next().first != "string") {
+    if(token_list.next().first != "String") {
         return "";
     }
     // Continually read in strings until we reach and endl
-    while(token_list.next().first != "newl") {
-        if(token_list.next().first != "string") {
+    while(token_list.next().first != "Newl") {
+        if(token_list.next().first != "String") {
             // Remove the extra space at the end
             final.pop_back();
             // Readd the starting and ending " characters
@@ -78,7 +78,7 @@ string Parser::check_string() {
 
 string Parser::check_assign() {
     string final;
-    if(token_list.next().first != "id") {
+    if(token_list.next().first != "Id") {
         //cout << "Error in check_assign: Only identifiers can be assigned" << endl;
         return "";  // Return empty string, we were unable to match.
     }
@@ -97,9 +97,9 @@ string Parser::check_assign() {
     // Pop the assignement operator
     token_list.pop();
 
-    if(token_list.next().first == "int") {
+    if(token_list.next().first == "Int") {
         // If it's already defined, do not put int in front
-        if(this->find_id(id, "int")) {
+        if(this->find_id(id, "Int")) {
             final = id + " = ";
         }
         else {
@@ -107,13 +107,13 @@ string Parser::check_assign() {
             final = "int " + id + " = ";
 
             // Add the id to the defined identifiers set.
-            this->add_id(id, "int");
+            this->add_id(id, "Int");
         }
         // TODO: evaulate integer expression
         final += check_math();
     }
-    else if(token_list.next().first == "string") {
-        if(this->find_id(id, "string")) {
+    else if(token_list.next().first == "String") {
+        if(this->find_id(id, "String")) {
             final = id + " = ";
         }
         else {
@@ -121,7 +121,7 @@ string Parser::check_assign() {
             final = "string " + id + " = ";
 
             // Add the id to the defined identifiers set.
-            this->add_id(id, "string");
+            this->add_id(id, "String");
         }
         // Add the string to the assignment
         final += check_string();

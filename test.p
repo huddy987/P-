@@ -1,4 +1,4 @@
-hudson = 'test' 'test1' 'test2'
+hudson = 'test' 'test1' 'test2' 'test3' 'test4'
 hudson = 'hmm'
 
 richmond = 1 + 2 * 3 * 5
