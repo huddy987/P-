@@ -11,9 +11,24 @@ N Start SFunction SArgument | IFunction IArgument | Identifier Assignment
 // ==================================================
 //
 
+// Print function grammar
 N SFunction Print SFunctionArgument
-N SFuncionArgument Delimiter SArgument
+N SFunctionArgument Delimiter SArgument
 N Print print
+
+//
+// ==================================================
+//
+
+// Integer function grammar
+// ==================================================
+//
+
+// Sort function grammar
+N IFunction Sort IFunctionArgument
+// Only let user do this on identifiers since it will modify the value
+N IFunctionArgument Delimiter Identifier
+N Sort sort
 
 //
 // ==================================================
@@ -32,7 +47,21 @@ N Assignment Equality SArgument | Equality IArgument | Equality Identifier
 N SArgument SArgument SArgument | string
 
 // Integer Argument
-N IArgument arg
+// Lets us mix and match math expressions and integers.
+N IArgument MathArgument IArgument | IArgument IArgument | int
+
+// This is all the fancy stuff for PEDMAS
+N MathArgument  int | Open Expr_Close  | Term MulOp_Factor | Expr AddOp_Term   | AddOp Term
+N Term     int  | Open Expr_Close  | Term MulOp_Factor
+N Factor   int  | Open Expr_Close
+N Primary  int  | Open Expr_Close
+N AddOp    + | −
+N MulOp    * | /
+N Open     (
+N Close    )
+N AddOp_Term   AddOp Term
+N MulOp_Factor     MulOp Factor
+N Expr_Close   Expr Close
 
 //
 // ==================================================
@@ -40,6 +69,6 @@ N IArgument arg
 
 // General terminal grammar
 N Delimiter  :
-N Identifier identifier
+N Identifier id
 N Equality =
 Q

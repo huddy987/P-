@@ -1,2 +1,4 @@
 testfile.txt
-./tests
+tests/*
+grammar
+lexer

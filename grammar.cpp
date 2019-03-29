@@ -12,9 +12,9 @@ using namespace std;
 #define START "S0"
 
 /*
- * Input  - 
- *        - 
- * Output - 
+ * Input  -
+ *        -
+ * Output -
  */
 
 
@@ -45,7 +45,7 @@ VS splicer(string line) {
 // this assumes that the proper format is followed
 /*
  * Input  - line: the entire line of definition for the nonterminal
- *        
+ *
  * Output - vector string of each production rule
  */
 VS productionSplit(VS line) {
@@ -93,7 +93,7 @@ VS productionSplit(VS line) {
 
 /*
  * Input  - letter char
- *        - 
+ *        -
  * Output - true if the argument is a capital letter
           - false otherwise
  */
@@ -120,7 +120,7 @@ bool CNFvalid(string production) {
 
 /*
  * Input  - vector string
- *        - 
+ *        -
  * Output - none prints a vector separated by whitespace
  */
 void printVec(VS stuff) {
@@ -171,19 +171,10 @@ unordered_map<string, USS> makeGrammar() {
         // read the input then splice it by spaces
         getline(cin, holder);
         stringVec = splicer(holder);
-<<<<<<< HEAD
         // printVec(stringVec);
         // "//" is how we comment the conn
         if(stringVec.empty()) continue;
         if (stringVec[0] != "N") continue;
-=======
-        // "//" is how we comment the grammar definitions
-        // if just an empty line, skip the line
-        if (stringVec.empty()) continue;
-        // if its just a comment, skip the line
-        if (stringVec[0] == "//") continue;
-
->>>>>>> 3723107bd3ce3f7ff39af3bbbbeefa98f48c32ab
         for (int i=0; i < stringVec.size(); i++) {
             // if the element of the line is not capital, add it to the terminals
             if (!(isCapital(stringVec[i][0])) && stringVec[i] != "|") {
@@ -197,20 +188,15 @@ unordered_map<string, USS> makeGrammar() {
         assert(stringVec[0] == "N" | stringVec[0] == "//" | stringVec[0] == "Q");
 
         for (int i=0; i < stringy.size(); i++) {
-<<<<<<< HEAD
-            // put them in the set described by
-            grammar[stringVec[1]].insert(stringy[i]);
-=======
-            
+
             // put them in the set described by
             if (CNFvalid(stringy[i])) {
                 grammar[stringVec[1]].insert(stringy[i]);
             } else {
-                cout << "error: " << stringy[i] << endl;
+                cout << "error: " << stringy[i] << " " << stringy[i+1] << endl;
                 // crash the program if it's not in Chomsky Normal Form
                 assert(CNFvalid(stringy[i]));
             }
->>>>>>> 3723107bd3ce3f7ff39af3bbbbeefa98f48c32ab
         }
         // add the nonterminal to that key in the grammar
         if (holder != "Q") grammar["nonterminals"].insert(stringVec[1]);
@@ -232,7 +218,7 @@ bool thisStringInThisSet(string part, USS readySet) {
 // returns how many nonterminals there are
 /*
  * Input  - grammar, what describes the grammar
- *        - 
+ *        -
  * Output - none - just prints to screen
  */
 void printGrammar(unordered_map<string, USS> grammar) {
@@ -266,7 +252,7 @@ void printGrammar(unordered_map<string, USS> grammar) {
 
 /*
  * Input  - two unordered sets of strings
- *        - 
+ *        -
  * Output - example output:
             "AB" x "CD" = "A C", "A D", "B C", "B D"
  */
@@ -318,10 +304,6 @@ bool CYK(string line, unordered_map<string, USS> & grammar) {
     // row first; column second
     USS CYK[n][n];
 
-<<<<<<< HEAD
-int main() {
-
-=======
     // this populates the principal row with the nonterminals
     // that can map to that specific token
     for (int i=0; i<n ; i++) {
@@ -392,7 +374,7 @@ int main() {
 // this takes in the tests from grammarRules.txt
 /*
  * Input  - grammar for the syntax
- *        - 
+ *        -
  * Output - none : prints if the input given is valid or not
  */
 void testFunc(unordered_map<string, USS> & grammar) {
@@ -406,7 +388,7 @@ void testFunc(unordered_map<string, USS> & grammar) {
         // if it's empty or a comment, skip it
         if (split.empty()) continue;
         if (split[0] == "//") continue;
-        
+
         // check if valid then print result + input
         if (CYK(bruh,grammar)) {
             cout << "  valid: ";
@@ -418,13 +400,12 @@ void testFunc(unordered_map<string, USS> & grammar) {
 
 
 /*
- * Input  - 
- *        - 
- * Output - 
+ * Input  -
+ *        -
+ * Output -
  */
-int main() {  
+int main() {
     cout << endl;
->>>>>>> 3723107bd3ce3f7ff39af3bbbbeefa98f48c32ab
     // makeGrammar creates a map
     // the key is the non terminal
     // the value is an unordered set of strings
@@ -432,12 +413,7 @@ int main() {
     // The grammar inputted is assumed to be in Chomsky Normal Form
     unordered_map<string, USS> grammar = makeGrammar();
     printGrammar(grammar);
-<<<<<<< HEAD
-
-
-=======
     testFunc(grammar);
->>>>>>> 3723107bd3ce3f7ff39af3bbbbeefa98f48c32ab
 
     cout << "The End" << endl << endl;
     return 0;

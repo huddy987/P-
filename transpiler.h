@@ -8,32 +8,42 @@
 #include <stdlib.h> // So we can exit if theres an error
 #include <string>   // For string manipulation
 #include <unistd.h> // For usleep()
+#include <fstream> // For writing to files
 
 
 using namespace std;
 
-class Parser {
+class Transpiler {
     public:
         // Constructor
-        Parser(lexer t_list);
+        Transpiler(lexer t_list);
+
+        // Prints the starting code that is always required.
+        void start();
+
+        // Prints the ending code that is always required
+        void end();
+
+        // Compiles the code created by this file
+        void compile();
 
         // Keeps reading newlines in continually
         void read_until_newl();
 
         // Evaluates a math expression
-        string check_math();
+        string math_expression();
 
         // Evaluates a sequence of strings
-        string check_string();
+        string string_expression();
 
         // Evaluates assignment operation
-        string check_assign();
+        void assignment();
 
         // Evaluates print function
-        string check_print();
+        void print();
 
         // Evaluates all of the aboves in attempt to match, returns a blank string otherwise
-        string check_all();
+        //string check_all();
 
         // Adds a defined id
         void add_id(string id, string type);

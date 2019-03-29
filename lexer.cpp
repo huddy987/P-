@@ -55,7 +55,7 @@ string lexer::determine_type(string value) {
       return "bool";
     }
     // Check if it is a string token
-    else if(regex_match(value, regex("('.*.?')"))) {
+    else if(regex_match(value, regex("(\".*.?\")"))) {
       return "string";
     }
     // If it reaches this, it is an identifier

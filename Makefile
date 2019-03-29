@@ -1,5 +1,8 @@
 all: lexer digraphtest treetest grammar
 
+transpiler:
+	g++ transpiler.cpp lexer.cpp -std=c++11 -o transpiler
+
 lexer:
 	g++ lexer.cpp tests/lextest.cpp -std=c++11 -o lexer
 
