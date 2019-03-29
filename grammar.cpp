@@ -128,7 +128,8 @@ unordered_map<string, unordered_set<string>> makeGrammar() {
         stringVec = splicer(holder);
         // printVec(stringVec);
         // "//" is how we comment the conn
-        if (stringVec[0] == "//") continue;
+        if(stringVec.empty()) continue;
+        if (stringVec[0] != "N") continue;
         for (int i=0; i < stringVec.size(); i++) {
             if ('a' <= (stringVec[i])[0] && (stringVec[i])[0] <= 'z') {
                 grammar["terminals"].insert(stringVec[i]);
@@ -140,7 +141,7 @@ unordered_map<string, unordered_set<string>> makeGrammar() {
         assert(stringVec[0] == "N" | stringVec[0] == "//" | stringVec[0] == "Q");
 
         for (int i=0; i < stringy.size(); i++) {
-            // put them in the set described by 
+            // put them in the set described by
             grammar[stringVec[1]].insert(stringy[i]);
         }
 
@@ -180,8 +181,8 @@ void printGrammar(unordered_map<string, unordered_set<string>> grammar) {
 }
 
 
-int main() {  
-    
+int main() {
+
     // makeGrammar creates a map
     // the key is the non terminal
     // the value is an unordered set of strings
@@ -189,8 +190,8 @@ int main() {
     // The grammar inputted is assumed to be in Chomsky Normal Form
     unordered_map<string, unordered_set<string>> grammar = makeGrammar();
     printGrammar(grammar);
-    
-    
+
+
 
     return 0;
 }

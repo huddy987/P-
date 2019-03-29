@@ -9,6 +9,7 @@ null
 bool
 
 Grammer:
+Terminals: newl,
 
 id := (user_defined)
 op := :|=|+|-|*|/| DONE
@@ -22,6 +23,3 @@ print := : id|num|bool|str|none newl DONE (can be expanded on later)
 assign := id = id|num|bool|str newl
 
 math := RICHMOND
-
-
-TODO: evaluate math expressions on one line
