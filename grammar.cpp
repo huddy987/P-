@@ -190,10 +190,15 @@ unordered_map<string, USS> makeGrammar() {
         assert(stringVec[0] == "N" | stringVec[0] == "//" | stringVec[0] == "Q");
 
         for (int i=0; i < stringy.size(); i++) {
-            // crash the program if it's not in Chomsky Normal Form
-            assert(CNFvalid(stringy[i]));
+            
             // put them in the set described by
-            grammar[stringVec[1]].insert(stringy[i]);
+            if (CNFvalid(stringy[i])) {
+                grammar[stringVec[1]].insert(stringy[i]);
+            } else {
+                cout << "error: " << stringy[i] << endl;
+                // crash the program if it's not in Chomsky Normal Form
+                assert(CNFvalid(stringy[i]));
+            }
         }
         // add the nonterminal to that key in the grammar
         if (holder != "Q") grammar["nonterminals"].insert(stringVec[1]);
