@@ -1,4 +1,4 @@
-all: lexer digraphtest treetest
+all: lexer digraphtest treetest grammar
 
 lexer:
 	g++ lexer.cpp tests/lextest.cpp -std=c++11 -o lexer
@@ -11,7 +11,9 @@ treetest:
 
 grammar:
 	g++ grammar.cpp -std=c++11 -o grammar
-	./grammar < grammarRules.txt
+
+grammartest: grammar
+	./grammar < grammarTest.txt
 
 clean:
 	rm -rf lexer
