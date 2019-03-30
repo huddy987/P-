@@ -171,19 +171,12 @@ unordered_map<string, USS> makeGrammar() {
         // read the input then splice it by spaces
         getline(cin, holder);
         stringVec = splicer(holder);
-<<<<<<< HEAD
         // printVec(stringVec);
         // "//" is how we comment the conn
         if(stringVec.empty()) continue;
         if (stringVec[0] != "N") continue;
-=======
         // "//" is how we comment the grammar definitions
         // if just an empty line, skip the line
-        if (stringVec.empty()) continue;
-        // if its just a comment, skip the line
-        if (stringVec[0] == "//") continue;
-
->>>>>>> 3723107bd3ce3f7ff39af3bbbbeefa98f48c32ab
         for (int i=0; i < stringVec.size(); i++) {
             // if the element of the line is not capital, add it to the terminals
             if (!(isCapital(stringVec[i][0])) && stringVec[i] != "|") {
@@ -196,12 +189,7 @@ unordered_map<string, USS> makeGrammar() {
         // this is just for error checking
         assert(stringVec[0] == "N" | stringVec[0] == "//" | stringVec[0] == "Q");
 
-        for (int i=0; i < stringy.size(); i++) {
-<<<<<<< HEAD
-            // put them in the set described by
-            grammar[stringVec[1]].insert(stringy[i]);
-=======
-            
+        for (int i=0; i < stringy.size(); i++) {  
             // put them in the set described by
             if (CNFvalid(stringy[i])) {
                 grammar[stringVec[1]].insert(stringy[i]);
@@ -210,7 +198,6 @@ unordered_map<string, USS> makeGrammar() {
                 // crash the program if it's not in Chomsky Normal Form
                 assert(CNFvalid(stringy[i]));
             }
->>>>>>> 3723107bd3ce3f7ff39af3bbbbeefa98f48c32ab
         }
         // add the nonterminal to that key in the grammar
         if (holder != "Q") grammar["nonterminals"].insert(stringVec[1]);
@@ -317,11 +304,6 @@ bool CYK(string line, unordered_map<string, USS> & grammar) {
     int n = split.size();
     // row first; column second
     USS CYK[n][n];
-
-<<<<<<< HEAD
-int main() {
-
-=======
     // this populates the principal row with the nonterminals
     // that can map to that specific token
     for (int i=0; i<n ; i++) {
@@ -424,7 +406,6 @@ void testFunc(unordered_map<string, USS> & grammar) {
  */
 int main() {  
     cout << endl;
->>>>>>> 3723107bd3ce3f7ff39af3bbbbeefa98f48c32ab
     // makeGrammar creates a map
     // the key is the non terminal
     // the value is an unordered set of strings
@@ -432,12 +413,7 @@ int main() {
     // The grammar inputted is assumed to be in Chomsky Normal Form
     unordered_map<string, USS> grammar = makeGrammar();
     printGrammar(grammar);
-<<<<<<< HEAD
-
-
-=======
     testFunc(grammar);
->>>>>>> 3723107bd3ce3f7ff39af3bbbbeefa98f48c32ab
 
     cout << "The End" << endl << endl;
     return 0;
