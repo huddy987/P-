@@ -78,17 +78,25 @@ bool Transpiler::find_id(string id, string type) {
 }
 
 void Transpiler::read_until_newl() {
-    while(token_list.next().first != "Newl") {
+    while(token_list.next().first == "newl") {
         token_list.pop();
     }
-    // Pop out the newline character
-    token_list.pop();
 }
 
-// TODO: Fix this
+// Continually appends chains of math expressions together
 string Transpiler::math_expression() {
-    // TODO: RICHMOND
-    return ""; // just for now so stuff compiles
+    string final;
+    // Check if the input is even a math expression to begin with
+    if(token_list.next().first != "int") {
+        cout << token_list.next().second << endl;
+        cout << "Fail in math_expression: Value is not an integer" << endl;
+        exit(EXIT_FAILURE);
+    }
+    while(token_list.next().first == "int" or token_list.next().first == "op") {
+        final += token_list.next().second;
+        token_list.pop();
+    }
+    return final;
 }
 
 // Continually appends chains of strings together into a single string
@@ -124,6 +132,7 @@ string Transpiler::string_expression() {
 
 // Writes an assignment to the file
 void Transpiler::assignment() {
+    read_until_newl(); // Pop out all prior newlines
     string final;
     if(token_list.next().first != "id") {
         cout << "Error in check_assign: Only identifiers can be assigned" << endl;
@@ -156,7 +165,6 @@ void Transpiler::assignment() {
             // Add the id to the defined identifiers set.
             this->add_id(id, "int");
         }
-        // TODO: evaulate integer expression
         final += math_expression();
     }
     else if(token_list.next().first == "string") {
@@ -174,7 +182,7 @@ void Transpiler::assignment() {
         final += string_expression();
     }
     else {
-        cout << token_list.next().first << endl;
+        cout << token_list.next().second << endl;
         cout << "Error: Assigning to an invalid token (must be int or string)" << endl;
         exit(EXIT_FAILURE);
     }
@@ -189,8 +197,10 @@ void Transpiler::assignment() {
     write_to_file(final);
 }
 
-bool first = 0; // flag for first token to be read in
 void Transpiler::print() {
+    read_until_newl(); // Pop out all prior newlines
+    bool first = 0; // flag for first token to be read in
+
     // Begin building the output
     string final = "cout";
     // Make sure print is the first token
@@ -217,14 +227,14 @@ void Transpiler::print() {
             exit(EXIT_FAILURE);
         }
 
-        if(token_list.next().first == "string") {
+        else if(token_list.next().first == "string") {
             // Add the string to the print statement
             final += " << " + string_expression();
             // We do all the popping inside of string_expression: no need to do it here
             if(first == 0) first = 1;
         }
         // If it is an id, and it is defined already, then add this to the print statement
-        if(token_list.next().first == "id" && this->find_id(token_list.next().second, "string")) {
+        else if(token_list.next().first == "id" && this->find_id(token_list.next().second, "string")) {
             // Add the id to the final string
             // Only adds the extra space at the front if it's first
             if(first != 0){
@@ -240,6 +250,10 @@ void Transpiler::print() {
             if(token_list.next().first != "newl") {
                 final += " << \" \"";
             }
+        }
+        else {
+            cout << "Error in print statement: Cannot print non-strings" << endl;
+            exit(EXIT_FAILURE);
         }
     }
     // Pop out the newl character
@@ -296,8 +310,11 @@ int main() {
     Transpiler t = Transpiler(token_test);
 
     t.start();
-
+    
     t.assignment();
+    t.assignment();
+    t.print();
+    t.print();
     t.print();
 
     t.end();

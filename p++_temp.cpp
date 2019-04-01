@@ -13,7 +13,10 @@
 using namespace std;
 
 int main() {
+int richmond = 70+10*20-30/2;
 string hudson = "bruh";
+cout << "Hello" << endl;
+cout << hudson << endl;
 cout << hudson << " " << "test" << " " << hudson << " " << "test1" << " " << hudson << " " << "test2 test3 test4" << endl;
    return 0;
 }
