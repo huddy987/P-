@@ -175,6 +175,8 @@ unordered_map<string, USS> makeGrammar() {
         // "//" is how we comment the conn
         if(stringVec.empty()) continue;
         if (stringVec[0] != "N") continue;
+        // "//" is how we comment the grammar definitions
+        // if just an empty line, skip the line
         for (int i=0; i < stringVec.size(); i++) {
             // if the element of the line is not capital, add it to the terminals
             if (!(isCapital(stringVec[i][0])) && stringVec[i] != "|") {
