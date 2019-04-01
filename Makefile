@@ -1,4 +1,4 @@
-all: lexer digraphtest treetest grammar
+all: lexer digraphtest treetest grammar transpiler
 
 transpiler:
 	g++ transpiler.cpp lexer.cpp -std=c++11 -o transpiler
@@ -23,3 +23,4 @@ clean:
 	rm -rf digraphtest
 	rm -rf treetest
 	rm -rf grammar
+	rm -rf transpiler
