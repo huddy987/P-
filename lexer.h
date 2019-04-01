@@ -34,7 +34,7 @@ class lexer {
         unordered_set<string> func {"print"};
         unordered_set<string> op {":", "=", "+", "-", "*", "/"};
         unordered_set<string> bin_op {"!=", "=="};
-        unordered_set<string> num {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
+        //unordered_set<string> num {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
         unordered_set<string> newl {"\n"};
         unordered_set<string> boolean {"TRUE", "FALSE"};
         unordered_set<string> none {"NULL"};

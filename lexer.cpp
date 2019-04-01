@@ -39,7 +39,8 @@ string lexer::determine_type(string value) {
         return "op";
     }
     // Check if it is a number
-    else if (num.find(value) != num.end()) {
+    // https://stackoverflow.com/questions/7407099/regex-match-numbers-of-variable-length
+    else if (regex_match(value, regex("(\\d+)"))) {
         return "int";
     }
     // Check if it is a new line token
@@ -55,7 +56,7 @@ string lexer::determine_type(string value) {
       return "bool";
     }
     // Check if it is a string token
-    else if(regex_match(value, regex("('.*.?')"))) {
+    else if(regex_match(value, regex("(\".*.?\")"))) {
       return "string";
     }
     // If it reaches this, it is an identifier
