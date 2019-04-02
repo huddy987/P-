@@ -10,8 +10,12 @@
 
 // Start Grammar for Assignment
 N Start Left Equality | int    | id  | Open Expr_Close   | Term MulOp_Factor     | Expr AddOp_Term   | AddOp Term
-N Left id
+
 N Equality Equal MathArgument | Equal StringArgument
+
+// Assignment grammar: can assign sterings or numbers
+N Assignment Identifier Equality_Left
+N Equality_Left Equal StringArgument | Equal MathArgument
 
 // This one's pretty important
 N StringArgument StringArgument StringArgument | string | StringArgument Identifier | Identifier StringArgument | id
@@ -33,22 +37,20 @@ N MulOp_Factor     MulOp Factor
 N Expr_Close   Expr Close
 
 // This is For Printing
-N Function add | subtract | func
 N Delimeter :
 
-// Printing
+// Printing syntax [print : string/id/string/...]
 N Print PFunction Delimeter_SArgument
 N PFunction print
 N Delimeter_SArgument Delimeter StringArgument
+// add the printing graph methods
 
-// Adding function
-N MathFunc AFunction Delimeter_AArgument
-N AFunction add | subtract | power
-N Delimeter_AArgument Delimeter AArgument
-N AArgument AArgument AArgument | int    | id  | Open Expr_Close   | Term MulOp_Factor     | Expr AddOp_Term   | AddOp Term
+// Check graph object
+N GraphFunc Identifier GraphMethod_Argument
+N GraphMethod_Argument GraphMethod Argument
+N GraphMethod addvertex | addedge | getvertex | isEdge | size | numNeighbours | isVertex
 
-
-
+// addvertex; addEdge; GetVertex; isEdge; Size; numNeighbours; isEdge; isVertex
 
 
 

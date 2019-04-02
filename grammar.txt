@@ -16,19 +16,6 @@ N SFunction Print SFunctionArgument
 N SFunctionArgument Delimiter SArgument
 N Print print
 
-//
-// ==================================================
-//
-
-// Integer function grammar
-// ==================================================
-//
-
-// Sort function grammar
-N IFunction Sort IFunctionArgument
-// Only let user do this on identifiers since it will modify the value
-N IFunctionArgument Delimiter Identifier
-N Sort sort
 
 //
 // ==================================================

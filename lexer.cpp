@@ -24,6 +24,11 @@ void lexer::pop() {
     this->token_list.pop();
 }
 
+// determines if the queue is empty or not
+bool lexer::isempty() {
+    return this->token_list.empty();
+}
+
 // Returns lexical "type"
 string lexer::determine_type(string value) {
     // Check if it is an identifier

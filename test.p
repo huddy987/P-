@@ -1,8 +1,8 @@
-richmond = 70 + 10 * 20 - 30 / 2
+richmond = 2 2 2 3
 
 hudson = "bruh"
 
-print : "Hello"
+print : "Hello" "test"
 
 print : hudson
 
@@ -18,4 +18,3 @@ print :
 
 Print : "hello"
 
-add : 5 8
