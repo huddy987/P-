@@ -52,7 +52,7 @@ class Transpiler {
         bool find_id(string id, string type);
 
         // Handles graph objects
-        string graph(string id, string method, string first, string second);
+        string graph();
 
     private:
         lexer token_list;

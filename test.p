@@ -6,9 +6,9 @@ hudson = "bruh"
 
 hudson = "hmmm"
 
-g = Graph
+g = graph
 
-g = Graph
+g = graph
 
 g addVertex 5 "Hello"
 
@@ -18,9 +18,9 @@ g addEdge 5 6
 
 g addEdge 6 5
 
-print : g getVertex 5
+print : g getVertex 5 "bruh" 5 "test" hudson richmond richmond
 
-print : g isEdge 5 6
+print : g isEdge 5 6 g isEdge 5 6 g isEdge 8 9
 
 print : g size
 
@@ -33,6 +33,7 @@ print : g isVertex 5
 print : "The" 5 * 2 * 1 + 10 - 20032
 
 print : "The" 5 * 2 * 1 + 10 - 20032
+
 
 print : "A string test test hello test" hudson hudson richmond richmond "A string test test hello test"  hudson richmond hudson richmond
 
