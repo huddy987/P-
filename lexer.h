@@ -29,6 +29,7 @@ class lexer {
 
         // Pops the next item off of the queue
         void pop();
+        bool isempty();
 
     private:
         unordered_set<string> func {"print", "add", "subtract", "func"};

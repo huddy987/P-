@@ -40,7 +40,7 @@ int main(){
     token_test = tokenize_file("test.p");
     copy = token_test;
 
-    while(true) {
+    while(!token_test.isempty()) {
       // make the string to be analyzed by CYK
       analyze = createLine(token_test);
 
@@ -67,3 +67,7 @@ int main(){
     // Comparing tokens
     return 0;
 }
+
+
+
+// make clean && make lexer && ./lexer
