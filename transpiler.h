@@ -51,6 +51,9 @@ class Transpiler {
         // Checks if the id is defined
         bool find_id(string id, string type);
 
+        // Handles graph objects
+        string graph(string id, string method, string first, string second);
+
     private:
         lexer token_list;
         // Key is the identifier name, item is the identifier type

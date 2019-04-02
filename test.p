@@ -6,7 +6,29 @@ hudson = "bruh"
 
 hudson = "hmmm"
 
-# g = Graph
+g = Graph
+
+g = Graph
+
+g addVertex 5 "Hello"
+
+g addVertex 6 "Goodbye!"
+
+g addEdge 5 6
+
+g addEdge 6 5
+
+print : g getVertex 5
+
+print : g isEdge 5 6
+
+print : g size
+
+print : g numNeighbours 5
+
+print : g isEdge 5 6
+
+print : g isVertex 5
 
 print : "The" 5 * 2 * 1 + 10 - 20032
 
@@ -23,27 +45,3 @@ print : hudson "test" hudson "test1" hudson richmond "test2" richmond "test3" ri
 print : richmond hudson hudson hudson hudson 5 * 4 + 3 / 2
 
 print : hudson
-
-<<<<<<< HEAD
-print : hudson "test" hudson "test1" hudson "test2" "test3" "test4"
-
-print : bruh
-
-print : bruh
- 
-print : "hello"
-
-print : 
-
-Print : "hello"
-
-add : 5 8
-=======
-
-
-
-
-
-
-print : "Test"
->>>>>>> master

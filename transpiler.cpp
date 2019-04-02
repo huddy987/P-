@@ -1,5 +1,9 @@
 // Functions here define the grammer specified in the readme
 
+
+// TODO: For graphs, if the id is defined as a graph then go into the graph handling thingy
+// So basically, call the graph handling thingy at the top of every function?
+// Still need to make the graph handler thingy to send output to graph method
 #include "transpiler.h"
 
 using namespace std;
@@ -175,15 +179,21 @@ void Transpiler::assignment() {
     token_list.pop();
 
     // Try to match with digraph object
-    /*
+
     if(token_list.next().second == "Graph") {
         if(this->find_id(id, "graph")) {
-
+            final = id;
         }
-    }*/
+        else {
+            // Create the digraph object
+            final = "Digraph " + id;
 
+            // Add the id to the defined identifiers set
+            this->add_id(id, "graph");
+        }
+    }
     // Try to match with integer/math expression
-    if(token_list.next().first == "int") {
+    else if(token_list.next().first == "int") {
         // If it's already defined, do not put int in front
         if(this->find_id(id, "int")) {
             final = id + " = ";
@@ -228,6 +238,7 @@ void Transpiler::assignment() {
     write_to_file(final);
 }
 
+// Handles print statement logic
 void Transpiler::print() {
     read_until_newl(); // Pop out all prior newlines
     bool first = 0; // flag for first token to be read in
@@ -300,6 +311,48 @@ void Transpiler::print() {
     write_to_file(final);
 }
 
+// Handles graph and graph methods
+// Set second to 0 because it may not be used by certain methods
+string Transpiler::graph(string id, string method, string first = "", string second = "") {
+    // Messy, but it's because C++ doesn't allow switch statements of string
+    if (method == "addVertex") {
+        return id + "." + "addVertex" + "(" + first + "," + second + ")";
+    }
+
+    else if (method == "addEdge") {
+        return id + "." + "addEdge" + "(" + first + "," + second + ")";
+    }
+
+    else if (method == "getVertex") {
+        return id + "." + "getVertex" + "(" + first + ")";
+    }
+
+    else if (method == "isVertex") {
+        return id + "." + "isVertex" + "(" + first + ")";
+    }
+
+    else if (method == "isEdge") {
+        return id + "." + "isEdge" + "(" + first + "," + second + ")";
+    }
+
+    else if (method == "numNeighbours") {
+        return id + "." + "numNeighbours" + "(" + first + ")";
+    }
+
+    else if (method == "size") {
+        return id + "." + "size()";
+    }
+    /* These methods are a bit more complicated, we might not be able to implement these
+    else if (method == "isWalk") {
+    }
+    else if (method == "isPath") {
+    }
+    */
+    else {
+        return "This is not good";
+    }
+}
+
 
 int main() {
     // Example usage of the class
@@ -309,19 +362,30 @@ int main() {
 
     Transpiler t = Transpiler(token_test);
 
+    cout << t.graph("g", "addVertex", "1", "test") << endl;
+    cout << t.graph("g", "addEdge", "test", "test") << endl;
+    cout << t.graph("g", "getVertex", "5") << endl;
+    cout << t.graph("g", "isVertex", "5") << endl;
+    cout << t.graph("g", "isEdge", "5", "6") << endl;
+    cout << t.graph("g", "numNeighbours", "5") << endl;
+    cout << t.graph("g" , "size") << endl;
+    cout << t.graph("g", "some garbage lol", "4") << endl;
+    /*
     t.start();
 
     t.assignment();
     t.assignment();
     t.assignment();
     t.assignment();
+    t.assignment();
+    t.assignment();
     t.print();
     t.print();
     t.print();
     t.print();
     t.print();
-    t.print();
+    t.print();*/
 
     t.end();
-    t.compile();
+    //t.compile();
 }
