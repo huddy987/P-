@@ -1,15 +1,11 @@
 #include "lexer.h"
+#include <iostream>
 
 using namespace std;
 
 // Allows inserting of a new token
 void lexer::insert(string token) {
     string type = determine_type(token);
-    if(type == "string") {
-        // Change the first and last characters from ' to "
-        token[0] = '"';
-        token[token.size()-1] = '"';
-    }
     token_list.push(pair<string, string>(type, token));
 }
 
@@ -46,6 +42,9 @@ string lexer::determine_type(string value) {
     // Check if it is a new line token
     else if(newl.find(value) != newl.end()) {
       return "newl";
+    }
+    else if(key_words.find(value) != key_words.end()) {
+        return "key_word";
     }
     // Check if it is a nonetype token
     else if(none.find(value) != none.end()) {
@@ -88,8 +87,30 @@ lexer tokenize_file(string filename) {
        // Split into tokens
        // Used this https://www.geeksforgeeks.org/boostsplit-c-library/
        vector<string> result;
+
+       // Flag that we are creating a string
+       bool strflag = 0;
+
+       // String we will match
+       string out;
+
        boost::split(result, line, boost::is_any_of(" "));
        for(string token : result) {
+         // Swap into a different mode if we are scanning a string
+         if(token[0] == '\"' && token.back() != '\"') {
+             strflag = 1;
+             out = token;
+             continue;
+         }
+         if(strflag == 1) {
+            out += " " + token;
+            if(token.back() == '\"') {
+                // Exit "string" mode
+                strflag = 0;
+                lex.insert(out);
+            }
+            continue;
+        }
          // Ignore whitespace read in as a token
          if(token == "") {
            continue;
@@ -98,9 +119,11 @@ lexer tokenize_file(string filename) {
          else if(token == "#") {
            break;
          }
-         // For each token, insert it in the lexer object
-         lex.insert(token);
-			}
+         else {
+            out = token;
+         }
+         lex.insert(out);
+     }
       // Insert a newline token at the end of each line
       lex.insert("\n");
    }
