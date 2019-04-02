@@ -7,3 +7,15 @@ print : "Hello"
 print : hudson
 
 print : hudson "test" hudson "test1" hudson "test2" "test3" "test4"
+
+print : bruh
+
+print : bruh
+ 
+print : "hello"
+
+print : 
+
+Print : "hello"
+
+add : 5 8

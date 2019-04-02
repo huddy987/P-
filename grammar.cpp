@@ -6,10 +6,10 @@
 #include <bits/stdc++.h>
 #include <cassert>
 #include <utility>
+#include <fstream>
 
 using namespace std;
 
-#define START "S0"
 
 /*
  * Input  -
@@ -161,15 +161,21 @@ bool isThisNum(string line) {
         "nonterminals" : set of the non-terminals
         "terminals" : set of the terminals
  */
-unordered_map<string, USS> makeGrammar() {
+unordered_map<string, USS> makeGrammar(string filename) {
 
     unordered_map<string, USS> grammar;
     string holder;
     VS stringVec, stringy;
 
+    ifstream stream;
+   // Open the file
+   stream.open(filename);
+   // Assert that the file exists
+   assert(stream);
+
     while (holder != "Q") {
         // read the input then splice it by spaces
-        getline(cin, holder);
+        getline(stream, holder);
         stringVec = splicer(holder);
         // printVec(stringVec);
         // "//" is how we comment the conn
@@ -203,6 +209,7 @@ unordered_map<string, USS> makeGrammar() {
         // add the nonterminal to that key in the grammar
         if (holder != "Q") grammar["nonterminals"].insert(stringVec[1]);
     }
+    stream.close();
     return grammar;
 }
 
@@ -297,7 +304,7 @@ void printUSS(USS stringSet) {
  */
 // https://www.xarg.org/tools/cyk-algorithm/
 // https://www.youtube.com/watch?v=VTH1k-xiswM
-bool CYK(string line, unordered_map<string, USS> & grammar) {
+bool CYK(string line, unordered_map<string, USS> & grammar, string start = "Start") {
     VS split = splicer(line);
     if (split.empty()) {
         return false;
@@ -365,7 +372,7 @@ bool CYK(string line, unordered_map<string, USS> & grammar) {
         }
     }
     // cout << "Final Set: "; printUSS(CYK[n-1][0]);
-    if (thisStringInThisSet(START,CYK[n-1][0])){
+    if (thisStringInThisSet(start,CYK[n-1][0])){
         // the start is in the [n-1][0] block,
         // then the string is valid
         return true;
@@ -392,7 +399,7 @@ void testFunc(unordered_map<string, USS> & grammar) {
         if (split[0] == "//") continue;
 
         // check if valid then print result + input
-        if (CYK(bruh,grammar)) {
+        if (CYK(bruh,grammar, "Start")) {
             cout << "  valid: ";
         } else {
             cout << "invalid: ";
@@ -401,11 +408,13 @@ void testFunc(unordered_map<string, USS> & grammar) {
 }
 
 
+
+
 /*
  * Input  -
  *        -
  * Output -
- */
+
 int main() {
     cout << endl;
     // makeGrammar creates a map
@@ -413,10 +422,12 @@ int main() {
     // the value is an unordered set of strings
     //      of the allowed productions
     // The grammar inputted is assumed to be in Chomsky Normal Form
+    
     unordered_map<string, USS> grammar = makeGrammar();
     printGrammar(grammar);
     testFunc(grammar);
 
     cout << "The End" << endl << endl;
     return 0;
-}
+} */
+

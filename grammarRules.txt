@@ -5,11 +5,11 @@
 // if it starts with a lower case letter, its a terminal
 // these has their own sets in the map with key: "terminal" & "nonTerminal"
 // end the query with Q to mean Quit
-N S0   number    | variable  | Open Expr_Close   | Factor PowOp_Primary  | Term MulOp_Factor | Expr AddOp_Term   | AddOp Term
-N Expr    number    | variable  | Open Expr_Close   | Factor PowOp_Primary  | Term MulOp_Factor | Expr AddOp_Term   | AddOp Term
-N Term     number    | variable  | Open Expr_Close   | Factor PowOp_Primary  | Term MulOp_Factor
-N Factor   number    | variable  | Open Expr_Close   | Factor PowOp_Primary
-N Primary  number    | variable  | Open Expr_Close
+N MathArgument   int    | id  | Open Expr_Close   | Factor PowOp_Primary  | Term MulOp_Factor | Expr AddOp_Term   | AddOp Term
+N Expr    int    | id  | Open Expr_Close   | Factor PowOp_Primary  | Term MulOp_Factor | Expr AddOp_Term   | AddOp Term
+N Term     int    | id  | Open Expr_Close   | Factor PowOp_Primary  | Term MulOp_Factor
+N Factor   int    | id  | Open Expr_Close   | Factor PowOp_Primary
+N Primary  int    | id  | Open Expr_Close
 N AddOp    + | −
 N MulOp    * | /
 N PowOp    ^

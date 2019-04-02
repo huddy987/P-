@@ -8,31 +8,76 @@
 // The test immediately follows the description of the grammar
 // //////////////////////////////////////////////////////////////////////////////////////
 
-N S0   number    | variable  | Open Expr_Close   | Factor PowOp_Primary  | Term MulOp_Factor | Expr AddOp_Term   | AddOp Term
-N Expr    number    | variable  | Open Expr_Close   | Factor PowOp_Primary  | Term MulOp_Factor | Expr AddOp_Term   | AddOp Term
-N Term     number    | variable  | Open Expr_Close   | Factor PowOp_Primary  | Term MulOp_Factor
-N Factor   number    | variable  | Open Expr_Close   | Factor PowOp_Primary
-N Primary  number    | variable  | Open Expr_Close
-N AddOp    + | −
-N MulOp    * | /
-N PowOp    ^
+// Start Grammar for Assignment
+N Start Left Equality | int    | id  | Open Expr_Close   | Term MulOp_Factor     | Expr AddOp_Term   | AddOp Term
+N Left id
+N Equality Equal MathArgument | Equal StringArgument
+
+// This one's pretty important
+N StringArgument StringArgument StringArgument | string | StringArgument Identifier | Identifier StringArgument | id
+N Identifier id
+N Equal =
+
+// this is for PEMDAS
+N MathArgument   int    | id  | Open Expr_Close   | Term MulOp_Factor     | Expr AddOp_Term   | AddOp Term
+N Expr     int    | id  | Open Expr_Close     | Term MulOp_Factor     | Expr AddOp_Term   | AddOp Term
+N Term     int    | id  | Open Expr_Close     | Term MulOp_Factor
+N Factor   int    | id  | Open Expr_Close   
+N Primary      int    | id  | Open Expr_Close
+N AddOp    +     | -
+N MulOp    *     | /
 N Open     (
 N Close    )
 N AddOp_Term   AddOp Term
 N MulOp_Factor     MulOp Factor
-N PowOp_Primary    PowOp Primary
 N Expr_Close   Expr Close
+
+// This is For Printing
+N Function add | subtract | func
+N Delimeter :
+
+// Printing
+N Print PFunction Delimeter_SArgument
+N PFunction print
+N Delimeter_SArgument Delimeter StringArgument
+
+// Adding function
+N MathFunc AFunction Delimeter_AArgument
+N AFunction add | subtract | power
+N Delimeter_AArgument Delimeter AArgument
+N AArgument AArgument AArgument | int    | id  | Open Expr_Close   | Term MulOp_Factor     | Expr AddOp_Term   | AddOp Term
+
+
+
+
+
+
+
+
+
+
 Q
+
+
+
+
+
+
 // These are my test cases
 
 
 ||| / n
-( number + )
-variable + number ^ number * variable +
-variable + number
-( number )
-( number ) + variable
-( number ) + variable
-( ( number ) + variable )
+(  id  + )
+id + int ^ int * id +
+id + int
+( int )
+( int ) + id
+( int ) + id
+( ( int ) + id )
 ( oppa gang gang style )
+id = int + ( int + int ) * ( int / int )
+id = int + int - int + int
+id = int + int * int - int / int
+id = string string string
+id = id string id string id string string string
 Stop

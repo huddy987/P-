@@ -1,0 +1,30 @@
+
+Identifier --> id | 
+Equality --> = | 
+Assignment --> Equality Identifier | Equality IArgument | Equality SArgument | 
+Sort --> sort | 
+IArgument --> int | IArgument IArgument | MathArgument IArgument | 
+Open --> ( | 
+Delimiter --> : | 
+AddOp_Term --> AddOp Term | 
+Factor --> Open Expr_Close | int | 
+Expr_Close --> Expr Close | 
+Start --> IFunction IArgument | Identifier Assignment | SFunction SArgument | 
+IFunctionArgument --> Delimiter Identifier | 
+Print --> print | 
+SFunction --> Print SFunctionArgument | 
+SFunctionArgument --> Delimiter SArgument | 
+SArgument --> string | SArgument SArgument | 
+Close --> ) | 
+IFunction --> Sort IFunctionArgument | 
+MathArgument --> int | Open Expr_Close | AddOp Term | Term MulOp_Factor | Expr AddOp_Term | 
+Primary --> Open Expr_Close | int | 
+AddOp --> − | + | 
+Term --> Term MulOp_Factor | Open Expr_Close | int | 
+MulOp --> / | * | 
+MulOp_Factor --> MulOp Factor | 
+
+nonterminals: Identifier SArgument SFunctionArgument Close Equality Assignment Sort IArgument Open Factor SFunction IFunctionArgument Print IFunction MathArgument Primary AddOp Term MulOp MulOp_Factor Start Expr_Close AddOp_Term Delimiter 
+terminals: : string print ( ) sort int = id + − / * 
+Number of Non-Terminals: 24
+
