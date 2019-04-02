@@ -1,0 +1,22 @@
+// this is how we comment this file
+// so the very first char of every line is N to tell the
+//      the grammar maker that it's a Nonterminal being defined
+// if the token starts with a capital letter, its a nonterminal
+// if it starts with a lower case letter, its a terminal
+// these has their own sets in the map with key: "terminal" & "nonTerminal"
+// end the query with Q to mean Quit
+N MathArgument   int    | id  | Open Expr_Close   | Factor PowOp_Primary  | Term MulOp_Factor | Expr AddOp_Term   | AddOp Term
+N Expr    int    | id  | Open Expr_Close   | Factor PowOp_Primary  | Term MulOp_Factor | Expr AddOp_Term   | AddOp Term
+N Term     int    | id  | Open Expr_Close   | Factor PowOp_Primary  | Term MulOp_Factor
+N Factor   int    | id  | Open Expr_Close   | Factor PowOp_Primary
+N Primary  int    | id  | Open Expr_Close
+N AddOp    + | −
+N MulOp    * | /
+N PowOp    ^
+N Open     (
+N Close    )
+N AddOp_Term   AddOp Term
+N MulOp_Factor     MulOp Factor
+N PowOp_Primary    PowOp Primary
+N Expr_Close   Expr Close
+Q

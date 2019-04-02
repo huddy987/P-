@@ -51,12 +51,14 @@ N SArgument SArgument SArgument | string
 N IArgument MathArgument IArgument | IArgument IArgument | int
 
 // This is all the fancy stuff for PEDMAS
-N MathArgument  int | Open Expr_Close  | Term MulOp_Factor | Expr AddOp_Term   | AddOp Term
-N Term     int  | Open Expr_Close  | Term MulOp_Factor
-N Factor   int  | Open Expr_Close
-N Primary  int  | Open Expr_Close
-N AddOp    + | −
-N MulOp    * | /
+
+N MathArgument     int | id  | Open Expr_Close   | Term MulOp_Factor     | Expr AddOp_Term   | AddOp Term
+N Expr     int   | id  | Open Expr_Close     | Term MulOp_Factor     | Expr AddOp_Term   | AddOp Term
+N Term     int   | id  | Open Expr_Close     | Term MulOp_Factor
+N Factor   int   | id  | Open Expr_Close   
+N Primary  int   | id  | Open Expr_Close
+N AddOp    +     | -
+N MulOp    *     | /
 N Open     (
 N Close    )
 N AddOp_Term   AddOp Term

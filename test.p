@@ -24,6 +24,21 @@ print : richmond hudson hudson hudson hudson 5 * 4 + 3 / 2
 
 print : hudson
 
+<<<<<<< HEAD
+print : hudson "test" hudson "test1" hudson "test2" "test3" "test4"
+
+print : bruh
+
+print : bruh
+ 
+print : "hello"
+
+print : 
+
+Print : "hello"
+
+add : 5 8
+=======
 
 
 
@@ -31,3 +46,4 @@ print : hudson
 
 
 print : "Test"
+>>>>>>> master

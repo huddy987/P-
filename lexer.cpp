@@ -24,7 +24,7 @@ void lexer::pop() {
 string lexer::determine_type(string value) {
     // Check if it is an identifier
     if(func.find(value) != func.end()) {
-        return "Func";
+        return "func";
     }
     // Check if it is a binary operator
     else if(bin_op.find(value) != bin_op.end()) {

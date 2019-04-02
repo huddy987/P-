@@ -31,7 +31,7 @@ class lexer {
         void pop();
 
     private:
-        unordered_set<string> func {"print"};
+        unordered_set<string> func {"print", "add", "subtract", "func"};
         unordered_set<string> op {":", "=", "+", "-", "*", "/"};
         unordered_set<string> bin_op {"!=", "=="};
         unordered_set<string> key_words{"Graph"};

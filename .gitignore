@@ -2,3 +2,4 @@ testfile.txt
 tests/*
 grammar
 lexer
+out.txt

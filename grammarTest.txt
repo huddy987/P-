@@ -1,0 +1,83 @@
+// this is how we comment this file
+// so the very first char of every line is N to tell the
+//      the grammar maker that it's a Nonterminal being defined
+// if the token starts with a capital letter, its a nonterminal
+// if it starts with a lower case letter, its a terminal
+// these has their own sets in the map with key: "terminal" & "nonTerminal"
+// end the query with Q to mean Quit
+// The test immediately follows the description of the grammar
+// //////////////////////////////////////////////////////////////////////////////////////
+
+// Start Grammar for Assignment
+N Start Left Equality | int    | id  | Open Expr_Close   | Term MulOp_Factor     | Expr AddOp_Term   | AddOp Term
+N Left id
+N Equality Equal MathArgument | Equal StringArgument
+
+// This one's pretty important
+N StringArgument StringArgument StringArgument | string | StringArgument Identifier | Identifier StringArgument | id
+N Identifier id
+N Equal =
+
+// this is for PEMDAS
+N MathArgument   int    | id  | Open Expr_Close   | Term MulOp_Factor     | Expr AddOp_Term   | AddOp Term
+N Expr     int    | id  | Open Expr_Close     | Term MulOp_Factor     | Expr AddOp_Term   | AddOp Term
+N Term     int    | id  | Open Expr_Close     | Term MulOp_Factor
+N Factor   int    | id  | Open Expr_Close   
+N Primary      int    | id  | Open Expr_Close
+N AddOp    +     | -
+N MulOp    *     | /
+N Open     (
+N Close    )
+N AddOp_Term   AddOp Term
+N MulOp_Factor     MulOp Factor
+N Expr_Close   Expr Close
+
+// This is For Printing
+N Function add | subtract | func
+N Delimeter :
+
+// Printing
+N Print PFunction Delimeter_SArgument
+N PFunction print
+N Delimeter_SArgument Delimeter StringArgument
+
+// Adding function
+N MathFunc AFunction Delimeter_AArgument
+N AFunction add | subtract | power
+N Delimeter_AArgument Delimeter AArgument
+N AArgument AArgument AArgument | int    | id  | Open Expr_Close   | Term MulOp_Factor     | Expr AddOp_Term   | AddOp Term
+
+
+
+
+
+
+
+
+
+
+Q
+
+
+
+
+
+
+// These are my test cases
+
+
+||| / n
+(  id  + )
+id + int ^ int * id +
+id + int
+( int )
+( int ) + id
+( int ) + id
+( ( int ) + id )
+( oppa gang gang style )
+id = int + ( int + int ) * ( int / int )
+id = int + int - int + int
+id = int + int * int - int / int
+id = string string string
+id = id string id string id string string string
+Stop
