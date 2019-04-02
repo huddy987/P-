@@ -26,8 +26,10 @@ void Transpiler::start() {
     ofstream file;
     file.open("p++_temp.cpp");
 
-    system("echo You may see some files pop up in your current directory...");
-    system("echo Please do not delete them. We will handle that for you!");
+    if(!debug) {
+        system("echo You may see some files pop up in your current directory...");
+        system("echo Please do not delete them. We will handle that for you!");
+    }
 
     file << "// This file should have been deleted. Don't read it please (secret).\n\n";
 
@@ -50,13 +52,17 @@ void Transpiler::end() {
 
 // Compiles the C++ code
 void Transpiler::compile() {
-    system("echo P++ file sucessfully transpiled. Now compiling C++ code...");
+    if(!debug) {
+        system("echo P++ file sucessfully transpiled. Now compiling C++ code...");
+    }
     // Compile the C++ code
     system("g++ p++_temp.cpp digraph.cpp -std=c++11 -o program");
     // Remove the C++ code
     if(!debug) system("rm -rf p++_temp.cpp");
 
-    system("echo Done! Run ./program");
+    if(!debug) {
+        system("echo Done! Run ./program");
+    }
 }
 
 // Transpiler add id
@@ -85,14 +91,29 @@ void Transpiler::read_until_newl() {
 
 // Continually appends chains of math expressions together
 string Transpiler::math_expression() {
+    bool previous_int = 0;
     string final;
     // Check if the input is even a math expression to begin with
-    if(token_list.next().first != "int") {
+    if(token_list.next().first != "int" && !(token_list.next().first == "id" && this->find_id(token_list.next().second, "int"))) {
         cout << token_list.next().second << endl;
         cout << "Fail in math_expression: Value is not an integer" << endl;
         exit(EXIT_FAILURE);
     }
-    while(token_list.next().first == "int" or token_list.next().first == "op") {
+    while(token_list.next().first == "int" || token_list.next().first == "op" ||
+          (token_list.next().first == "id" && this->find_id(token_list.next().second, "int"))) {
+
+        // If this one is an int, set the flag for next time
+        if(token_list.next().first == "int" || token_list.next().first == "id") {
+            if(previous_int == 1) {
+                // Two ints in a row means we are done with this math expression
+                // (Treat the next int as a new math expression)
+                return final;
+            }
+            previous_int = 1;
+        }
+        else if (previous_int == 1) {
+            previous_int = 0;
+        }
         final += token_list.next().second;
         token_list.pop();
     }
@@ -153,6 +174,15 @@ void Transpiler::assignment() {
     // Pop the assignement operator
     token_list.pop();
 
+    // Try to match with digraph object
+    /*
+    if(token_list.next().second == "Graph") {
+        if(this->find_id(id, "graph")) {
+
+        }
+    }*/
+
+    // Try to match with integer/math expression
     if(token_list.next().first == "int") {
         // If it's already defined, do not put int in front
         if(this->find_id(id, "int")) {
@@ -167,6 +197,7 @@ void Transpiler::assignment() {
         }
         final += math_expression();
     }
+    // Try to match with string expression
     else if(token_list.next().first == "string") {
         if(this->find_id(id, "string")) {
             final = id + " = ";
@@ -230,20 +261,24 @@ void Transpiler::print() {
         else if(token_list.next().first == "string") {
             // Add the string to the print statement
             final += " << " + string_expression();
+
+            if(token_list.next().first != "newl") {
+                final += " << \" \"";
+            }
             // We do all the popping inside of string_expression: no need to do it here
             if(first == 0) first = 1;
         }
-        // If it is an id, and it is defined already, then add this to the print statement
-        else if(token_list.next().first == "id" && this->find_id(token_list.next().second, "string")) {
-            // Add the id to the final string
-            // Only adds the extra space at the front if it's first
-            if(first != 0){
+        else if (token_list.next().first == "int" || (token_list.next().first == "id" && (this->find_id(token_list.next().second, "int")))) {
+            final += " << " + math_expression();
+            if(first == 0) first = 1;
+            if(token_list.next().first != "newl") {
                 final += " << \" \"";
             }
-            else {
-                first = 1;
-            }
-            // C++ was yelling at me: I had to do it this way
+        }
+        // If it is an id, and it is defined already, then add this to the print statement
+        else if(token_list.next().first == "id" && (this->find_id(token_list.next().second, "string"))) {
+            // Add the id to the final string
+
             final += " << " + token_list.next().second;
             // Pop the token out of the queue
             token_list.pop();
@@ -252,7 +287,7 @@ void Transpiler::print() {
             }
         }
         else {
-            cout << "Error in print statement: Cannot print non-strings" << endl;
+            cout << "Error in print statement: Cannot print non-string" << token_list.next().second << endl;
             exit(EXIT_FAILURE);
         }
     }
@@ -265,41 +300,6 @@ void Transpiler::print() {
     write_to_file(final);
 }
 
-/*
-Garbage but dont delete in case we need it as a back up
-
-string Transpiler::check_all() {
-    line_count += 1;   // We will be reading in a line each time
-    string final;
-
-    // Check if it's a math expression
-    final = check_math();
-    // Return the expression
-    if(final != "") return final;
-
-    // Check if it's a string expression
-    final = check_string();
-    // Return the expression
-    if(final != "") return final;
-
-    // Check if it's an assignment expression
-    final = check_assign();
-    // Return the expression
-    if(final != "") return final;
-
-    // Check if it's a print expression
-    final = check_print();
-    // Return the expression
-    if(final != "") return final;
-
-    else {
-        // Read until we reach a new line
-        read_until_newl();
-
-        return "Error on line: " + to_string(line_count);
-    }
-}*/
-
 
 int main() {
     // Example usage of the class
@@ -310,9 +310,14 @@ int main() {
     Transpiler t = Transpiler(token_test);
 
     t.start();
-    
+
     t.assignment();
     t.assignment();
+    t.assignment();
+    t.assignment();
+    t.print();
+    t.print();
+    t.print();
     t.print();
     t.print();
     t.print();
