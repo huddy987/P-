@@ -6,6 +6,8 @@ using namespace std;
 
 bool debug = true;
 
+bool supress_print = false;
+
 // Function to write to a file
 void write_to_file(string to_write) {
     // Open the file, write to it, then close the file
@@ -26,7 +28,7 @@ void Transpiler::start() {
     ofstream file;
     file.open("p++_temp.cpp");
 
-    if(!debug) {
+    if(!supress_print) {
         system("echo You may see some files pop up in your current directory...");
         system("echo Please do not delete them. We will handle that for you!");
     }
@@ -52,15 +54,22 @@ void Transpiler::end() {
 
 // Compiles the C++ code
 void Transpiler::compile() {
-    if(!debug) {
+    if(!supress_print) {
         system("echo P++ file sucessfully transpiled. Now compiling C++ code...");
     }
     // Compile the C++ code
     system("g++ p++_temp.cpp digraph.cpp -std=c++11 -o program");
     // Remove the C++ code
-    if(!debug) system("rm -rf p++_temp.cpp");
+    if(!debug){
+         system("rm -rf p++_temp.cpp");
+     }
+    else if(!supress_print){
+        system("echo I############################################################I");
+        system("echo Running in debug mode, p++_temp.cpp will not be removed after.");
+        system("echo I############################################################I");
+     }
 
-    if(!debug) {
+    if(!supress_print) {
         system("echo Done! Run ./program");
     }
 }
@@ -175,15 +184,21 @@ void Transpiler::assignment() {
     token_list.pop();
 
     // Try to match with digraph object
-    /*
-    if(token_list.next().second == "Graph") {
+
+    if(token_list.next().second == "graph") {
         if(this->find_id(id, "graph")) {
-
+            final = id;
         }
-    }*/
+        else {
+            // Create the digraph object
+            final = "Digraph " + id;
 
+            // Add the id to the defined identifiers set
+            this->add_id(id, "graph");
+        }
+    }
     // Try to match with integer/math expression
-    if(token_list.next().first == "int") {
+    else if(token_list.next().first == "int") {
         // If it's already defined, do not put int in front
         if(this->find_id(id, "int")) {
             final = id + " = ";
@@ -214,7 +229,7 @@ void Transpiler::assignment() {
     }
     else {
         cout << token_list.next().second << endl;
-        cout << "Error: Assigning to an invalid token (must be int or string)" << endl;
+        cout << "Error: Assigning to an invalid token (must be int, string, or graph)" << endl;
         exit(EXIT_FAILURE);
     }
 
@@ -228,9 +243,9 @@ void Transpiler::assignment() {
     write_to_file(final);
 }
 
+// Handles print statement logic
 void Transpiler::print() {
     read_until_newl(); // Pop out all prior newlines
-    bool first = 0; // flag for first token to be read in
 
     // Begin building the output
     string final = "cout";
@@ -253,6 +268,7 @@ void Transpiler::print() {
 
     // Continually append the strings together
     while(token_list.next().first != "newl") {
+
         if(token_list.next().second == "print") {
             cout << "Error: Nested print statements are illegal." << endl;
             exit(EXIT_FAILURE);
@@ -266,11 +282,15 @@ void Transpiler::print() {
                 final += " << \" \"";
             }
             // We do all the popping inside of string_expression: no need to do it here
-            if(first == 0) first = 1;
+        }
+        else if(token_list.next().first == "id" && (this->find_id(token_list.next().second, "graph"))) {
+            final += " << " + graph();    // Add graph argument to the print statement
+            if(token_list.next().first != "newl") {
+                final += " << \" \"";
+            }
         }
         else if (token_list.next().first == "int" || (token_list.next().first == "id" && (this->find_id(token_list.next().second, "int")))) {
             final += " << " + math_expression();
-            if(first == 0) first = 1;
             if(token_list.next().first != "newl") {
                 final += " << \" \"";
             }
@@ -300,7 +320,78 @@ void Transpiler::print() {
     write_to_file(final);
 }
 
+// Handles graph and graph methods
+// Set second to 0 because it may not be used by certain methods
+string Transpiler::graph() {
+    read_until_newl(); // Pop out all prior newlines
 
+    string id;
+    if(token_list.next().first == "id" && this->find_id(token_list.next().second, "graph")) {
+        // Get the identifier
+        id = token_list.next().second;
+        token_list.pop();
+    }
+    else {
+        cout << "Identifier is undefined or not of type graph: " << token_list.next().second << endl;
+        assert(EXIT_FAILURE);
+    }
+    // Get the method
+    string method = token_list.next().second;
+    token_list.pop();
+    // Messy, but it's because C++ doesn't allow switch statements of string
+    if (method == "addVertex") {
+        string first = token_list.next().second;
+        token_list.pop();
+        string second = token_list.next().second;
+        token_list.pop();
+        // Open the file, write to it, then close the file
+        return id + "." + "addVertex" + "(" + first + "," + second + ")";
+    }
+
+    else if (method == "addEdge") {
+        string first = token_list.next().second;
+        token_list.pop();
+        string second = token_list.next().second;
+        token_list.pop();
+        return id + "." + "addEdge" + "(" + first + "," + second + ")";
+    }
+
+    else if (method == "getVertex") {
+        string first = token_list.next().second;
+        token_list.pop();
+        return id + "." + "getVertex" + "(" + first + ")";
+    }
+
+    else if (method == "isVertex") {
+        string first = token_list.next().second;
+        token_list.pop();
+        return id + "." + "isVertex" + "(" + first + ")";
+    }
+
+    else if (method == "isEdge") {
+        string first = token_list.next().second;
+        token_list.pop();
+        string second = token_list.next().second;
+        token_list.pop();
+        return id + "." + "isEdge" + "(" + first + "," + second + ")";
+    }
+
+    else if (method == "numNeighbours") {
+        string first = token_list.next().second;
+        token_list.pop();
+        return id + "." + "numNeighbours" + "(" + first + ")";
+    }
+
+    else if (method == "size") {
+        return id + "." + "size()";
+    }
+    else {
+        cout << "Undefined method for graph: " + method << endl;
+        exit(EXIT_FAILURE);
+    }
+}
+
+/*
 int main() {
     // Example usage of the class
     lexer token_test;
@@ -309,13 +400,23 @@ int main() {
 
     Transpiler t = Transpiler(token_test);
 
+
     t.start();
 
     t.assignment();
     t.assignment();
     t.assignment();
     t.assignment();
-    t.print();
+    t.assignment();
+    t.assignment();
+    string out = t.graph();
+    write_to_file(out + ";");
+    out = t.graph();
+    write_to_file(out + ";");
+    out = t.graph();
+    write_to_file(out + ";");
+    out = t.graph();
+    write_to_file(out + ";");
     t.print();
     t.print();
     t.print();
@@ -324,4 +425,4 @@ int main() {
 
     t.end();
     t.compile();
-}
+}*/
