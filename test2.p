@@ -16,6 +16,7 @@ print : "The number of neighbours of vertex 5 are:" g numNeighbours 5
 # Examples of variable modification
 test1 = 5
 test2 = 6
+print : g addEdge 5 6
 print : "test1 contains the number:" test1 "and test2 contains the number" test2
-test3 = test1 + test1 * test1 - test2 + test2 / g
+test3 = test1 + test1 * test1 - test2 + test2 / test1
 print : "After performing test1 + test1 * test1 - test2 + test2 / test1, the result is:" test3

@@ -127,7 +127,7 @@ string Transpiler::math_expression() {
         token_list.pop();
     }
     if(previous_int == 0 && !(token_list.next().first == "id" && this->find_id(token_list.next().second, "int"))) {
-        cout << "Fail in math_expression: Tried to use an undefined identifier in an expression" << endl;
+        cout << "Fail in math_expression: Tried to use an undefined or invalid identifier in an expression" << endl;
         exit(EXIT_FAILURE);
     }
     return final;
@@ -388,7 +388,40 @@ string Transpiler::graph() {
         token_list.pop();
         return id + "." + "numNeighbours" + "(" + first + ")";
     }
-
+    else if (method == "isWalk") {
+        final += id + "." + "isWalk" + "vector<int>{";
+        bool startflag = 1;
+        while(token_list.next().first == "int" || (token_list.next().first == "id" && this->find_id(token_list.next().second, "int"))) {
+            string next = token_list.next().second;
+            token_list.pop();
+            if(startflag == 1) {
+                final += next;
+                startflag = 0;
+            }
+            else {
+                final += "," + next;
+            }
+        }
+        final+="})";
+        return final;
+    }
+    else if (method == "isPath") {
+        final += id + "." + "isPath" + "vector<int>{";
+        bool startflag = 1;
+        while(token_list.next().first == "int" || (token_list.next().first == "id" && this->find_id(token_list.next().second, "int"))) {
+            string next = token_list.next().second;
+            token_list.pop();
+            if(startflag == 1) {
+                final += next;
+                startflag = 0;
+            }
+            else {
+                final += "," + next;
+            }
+        }
+        final+="})";
+        return final;
+    }
     else if (method == "size") {
         return id + "." + "size()";
     }

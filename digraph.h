@@ -66,7 +66,7 @@ public:
   bool isPath(vector<int> path);
 
 private:
-  unordered_map<int, unordered_set<int>> nbrs;
+  unordered_map<int, unordered_set<int> > nbrs;
   // Maps a vertex number to its contents (a string)
   unordered_map<int, string> vertex_map;
 };

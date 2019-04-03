@@ -52,7 +52,7 @@ int Digraph::size() {
 
 vector<int> Digraph::vertices() {
   vector<int> v;
-  for (unordered_map<int, unordered_set<int>>::const_iterator it = nbrs.begin();
+  for (unordered_map<int, unordered_set<int> >::const_iterator it = nbrs.begin();
     it != nbrs.end(); it++) {
       v.push_back(it->first);
     }
