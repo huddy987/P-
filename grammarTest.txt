@@ -18,7 +18,7 @@ N Assignment Identifier Equality_Left | Identifier Equal_GraphKey
 N Equality_Left Equal StringArgument | Equal MathArgument
 
 // This one's pretty important
-N StringArgument StringArgument StringArgument | string | id | int | StringArgument MathArgument
+N StringArgument StringArgument StringArgument | string | id | int | StringArgument MathArgument | StringArgument PrintGraphFunc
 N Identifier id
 N Equal =
 
@@ -26,7 +26,7 @@ N Equal =
 N MathArgument   int    | id  | Open Expr_Close   | Term MulOp_Factor     | Expr AddOp_Term   | AddOp Term
 N Expr     int    | id  | Open Expr_Close     | Term MulOp_Factor     | Expr AddOp_Term   | AddOp Term
 N Term     int    | id  | Open Expr_Close     | Term MulOp_Factor
-N Factor   int    | id  | Open Expr_Close   
+N Factor   int    | id  | Open Expr_Close
 N Primary      int    | id  | Open Expr_Close
 N AddOp    +     | -
 N MulOp    *     | /
@@ -44,7 +44,7 @@ N Num int | id
 N Print PFunction Delimeter_SArgument
 N PFunction print
 N Delimeter_SArgument Delimeter StringArgument | Delimeter PrintGraphFunc | Delimeter GraphFunc
-N PrintGraphFunc PrintGraphFunc PrintGraphFunc | GraphFunc StringArgument | StringArgument GraphFunc 
+N PrintGraphFunc PrintGraphFunc PrintGraphFunc | GraphFunc StringArgument | StringArgument GraphFunc
 
 
 // Check graph object
@@ -88,7 +88,7 @@ N IsWalk_or_isPath isWalk | isPath
 // for isVertex
 N NumNeighbours numNeighbours
 
-// addvertex; addEdge; GetVertex; isEdge; Size; numNeighbours; isEdge; 
+// addvertex; addEdge; GetVertex; isEdge; Size; numNeighbours; isEdge;
 
 
 

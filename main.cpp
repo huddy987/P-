@@ -8,26 +8,22 @@ int main() {
     // Example usage of the class
     lexer token_test;
 
-    token_test = tokenize_file("test.p");
+    token_test = tokenize_file("test2.p");
 
     UMSUSS grammar = makeGrammar("grammarTest.txt");
 
     Transpiler t = Transpiler(token_test);
 
-
-
-    // TODO Something with grammar here
-    t.start();
-
+    cout << "Checking context free grammar." << endl;
     // return what kind of line each thing is
     queue<string> grammar_queue = populateGrammar(grammar, token_test);
-    // TODO: Get a proper queue from the grammar thing
-    int counter = 0;
 
+    cout << "Context free grammar is good." <<  endl;
 
+    // If it passes the grammar test with no fails, then compile
+    t.start();
 
     while(!grammar_queue.empty()) {
-        // cout << counter++ << endl;
         if(grammar_queue.front() == "p") {
             t.print();
         }
@@ -37,7 +33,9 @@ int main() {
         else if(grammar_queue.front() == "g") {
             t.graph();
         } else {
-            cout << "Invalid Syntax: " << endl;
+            cout << "Invalid Syntax detected." << endl;
+            t.end();
+            exit(EXIT_FAILURE);
         }
         grammar_queue.pop();
     }

@@ -13,14 +13,16 @@
 using namespace std;
 
 int main() {
-int richmond = 2;
-richmond = 5;
-string hudson = "bruh";
-cout << "Hello test" << endl;
-hudson = "hmmm";
 Digraph g;
-g;
 g.addVertex(5,"Hello");
-g.addVertex(6,"Goodbye!");
+g.addVertex(6,"No");
+g.addVertex(7,"Yes");
 g.addEdge(5,6);
-g.addEdge(6,5);
+g.addEdge(5,7);
+cout << "Does the edge from 6 to 7 exist?" << " " << g.isEdge(6,7) << endl;
+cout << "5 is a vertex?:" << " " << g.isVertex(5) << endl;
+cout << "The contents of 5 are:" << " " << g.getVertex(5) << endl;
+cout << "The number of neighbours of vertex 5 are:" << " " << g.numNeighbours(5) << endl;
+int test1 = 5;
+int test2 = 6;
+cout << "test1 contains the number:" << " " << test1 << " " << "and test2 contains the number" << " " << test2 << endl;
