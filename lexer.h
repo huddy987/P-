@@ -40,7 +40,7 @@ class lexer {
         
         unordered_set<string> newl {"\n"};
         unordered_set<string> boolean {"TRUE", "FALSE"};
-        unordered_set<string> graph {"addVertex", "addEdge", "getVertex", "isEdge", "size", "numNeighbours", "isEdge", "isVertex"};
+        unordered_set<string> graph {"isPath", "isWalk" ,"addVertex", "addEdge", "getVertex", "isEdge", "size", "numNeighbours", "isEdge", "isVertex"};
         unordered_set<string> none {"NULL"};
 
         // First element is the type, second element is the token
