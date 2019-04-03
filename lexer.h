@@ -36,7 +36,6 @@ class lexer {
         unordered_set<string> op {":", "=", "+", "-", "*", "/"};
         unordered_set<string> bin_op {"!=", "=="};
 
-        unordered_set<string> key_words{"graph"};
         unordered_set<string> keywords{"graph"};
         
         unordered_set<string> newl {"\n"};

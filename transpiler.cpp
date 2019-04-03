@@ -165,6 +165,7 @@ void Transpiler::assignment() {
     read_until_newl(); // Pop out all prior newlines
     string final;
     if(token_list.next().first != "id") {
+        cout << token_list.next().first << endl;
         cout << "Error in check_assign: Only identifiers can be assigned" << endl;
         exit(EXIT_FAILURE);
     }
@@ -325,7 +326,7 @@ void Transpiler::print() {
 string Transpiler::graph() {
     read_until_newl(); // Pop out all prior newlines
 
-    string id;
+    string id, final;
     if(token_list.next().first == "id" && this->find_id(token_list.next().second, "graph")) {
         // Get the identifier
         id = token_list.next().second;
@@ -339,13 +340,15 @@ string Transpiler::graph() {
     string method = token_list.next().second;
     token_list.pop();
     // Messy, but it's because C++ doesn't allow switch statements of string
+
     if (method == "addVertex") {
         string first = token_list.next().second;
         token_list.pop();
         string second = token_list.next().second;
         token_list.pop();
         // Open the file, write to it, then close the file
-        return id + "." + "addVertex" + "(" + first + "," + second + ")";
+        cout << id + "." + "addVertex" + "(" + first + "," + second + ")" << endl;
+        final = id + "." + "addVertex" + "(" + first + "," + second + ")";
     }
 
     else if (method == "addEdge") {
@@ -353,7 +356,7 @@ string Transpiler::graph() {
         token_list.pop();
         string second = token_list.next().second;
         token_list.pop();
-        return id + "." + "addEdge" + "(" + first + "," + second + ")";
+        final = id + "." + "addEdge" + "(" + first + "," + second + ")";
     }
 
     else if (method == "getVertex") {
@@ -389,6 +392,8 @@ string Transpiler::graph() {
         cout << "Undefined method for graph: " + method << endl;
         exit(EXIT_FAILURE);
     }
+    write_to_file(final+";");
+    return "Error in Digraph Object Method";
 }
 
 /*

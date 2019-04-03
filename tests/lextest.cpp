@@ -3,6 +3,7 @@
 #include "../grammar.cpp"
 #include <string>
 #include <unordered_set>
+#include <queue>
 
 using namespace std;
 
@@ -37,47 +38,41 @@ string createLine(lexer & token_test) {
   return analyze;
 }
 
-int main(){
+string determineContext(string line, UMSUSS & grammar) {
 
-    unordered_map<string, USS> grammar = makeGrammar("grammarTest.txt");
+  VS Context {"MathArgument", "Print", "Assignment","GraphFunc","Start"};
+  VS ContextReturn {"m", "p","a","g","s"};
+  
+  for (int i=0; i<Context.size(); i++) {
+    if (CYK(line, grammar, Context[i])) return ContextReturn[i];
+  }
+  // for invalid
+  return "i";
+}
+
+
+queue<string> populateGrammar(UMSUSS & grammar, lexer token_test){
+
     // printGrammar(grammar);
     string analyze;
+    queue<string> grammar_queue;
 
     // Example usage of the class
-    lexer token_test, copy;
-    token_test = tokenize_file("test.p");
-    copy = token_test;
-
     while(!token_test.isempty()) {
       // make the string to be analyzed by CYK
       analyze = createLine(token_test);
 
       // skip empty lines
       if (analyze.empty()) continue;
+      cout << determineContext(analyze, grammar) << ": " << analyze << endl;
 
-      // check if the syntax is valid
-      if (CYK(analyze, grammar, "Print")) {
-        cout << "PRINT: ";
-      } else if (CYK(analyze, grammar, "MathArgument")) {
-        cout << "MATH: ";
-      } else if (CYK(analyze, grammar, "Assignment")) {
-        cout << "ASSIGN: " ;
-      } else if (CYK(analyze, grammar, "GraphFunc")) {
-        cout << "GRAPH: " ;
-      } else if (CYK(analyze, grammar, "Start")) {
-        cout << "valid: " ;
-      } else {
-        cout << "invalid: ";
-      }
-
-
-      // print the result then the string analyzed
-      cout << analyze << endl;
-
+      // determine what the context is: print this and the line
+      // cout << determineContext(analyze, grammar) << ": " << analyze << endl;
+      grammar_queue.push(determineContext(analyze, grammar));
     }
 
     // Comparing tokens
-    return 0;
+    return grammar_queue;
 }
 
 

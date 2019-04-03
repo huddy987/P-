@@ -20,6 +20,7 @@ using namespace std;
 
 typedef vector<string> VS;
 typedef unordered_set<string> USS;
+typedef unordered_map<string, USS> UMSUSS;
 
 // this splices a string by whitespace
 // returns a vector where each element is a "word" in the string

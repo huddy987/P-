@@ -1,5 +1,6 @@
 #include "transpiler.h"
 #include "lexer.h"
+#include "./tests/lextest.cpp"
 #include <iostream>
 #include <queue>
 
@@ -9,16 +10,24 @@ int main() {
 
     token_test = tokenize_file("test.p");
 
+    UMSUSS grammar = makeGrammar("grammarTest.txt");
+
     Transpiler t = Transpiler(token_test);
 
-    // TODO Something with grammer here
 
+
+    // TODO Something with grammar here
     t.start();
 
-    queue<string> grammar_queue;
+    // return what kind of line each thing is
+    queue<string> grammar_queue = populateGrammar(grammar, token_test);
     // TODO: Get a proper queue from the grammar thing
+    int counter = 0;
+
+
 
     while(!grammar_queue.empty()) {
+        // cout << counter++ << endl;
         if(grammar_queue.front() == "p") {
             t.print();
         }
@@ -27,6 +36,8 @@ int main() {
         }
         else if(grammar_queue.front() == "g") {
             t.graph();
+        } else {
+            cout << "Invalid Syntax: " << endl;
         }
         grammar_queue.pop();
     }

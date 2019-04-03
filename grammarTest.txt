@@ -14,7 +14,7 @@ N Start Left Equality | int    | id  | Open Expr_Close   | Term MulOp_Factor    
 N Equality Equal MathArgument | Equal StringArgument
 
 // Assignment grammar: can assign sterings or numbers
-N Assignment Identifier Equality_Left
+N Assignment Identifier Equality_Left | Identifier Equal_GraphKey
 N Equality_Left Equal StringArgument | Equal MathArgument
 
 // This one's pretty important
@@ -48,11 +48,11 @@ N PrintGraphFunc PrintGraphFunc PrintGraphFunc | GraphFunc StringArgument | Stri
 
 
 // Check graph object
-N GraphFunc Identifier Equal_GraphKey | Identifier GraphMethod_Argument
+N GraphFunc Identifier GraphMethod_Argument
 
 // this is for creating the graph object
 N Equal_GraphKey Equal GraphKey
-N GraphKey key_word
+N GraphKey keyword
 
 // this is graph methods
 N GraphMethod_Argument AddVert ADVrgument | AddEdge EdgeArgument | GetVertex Num | IsVertex Num | IsEdge Num | size | NumNeighbours Num

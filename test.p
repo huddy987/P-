@@ -1,4 +1,4 @@
-richmond = 2 2 2 3
+richmond = 2
 
 richmond = 5
 
@@ -35,8 +35,6 @@ print : g isVertex 5
 print : "The" 5 * 2 * 1 + 10 - 20032
 
 print : "The" 5 * 2 * 1 + 10 - 20032
-
-print : Hello = 8
 
 print : "A string test test hello test" hudson hudson richmond richmond "A string test test hello test"  hudson richmond hudson richmond
 
