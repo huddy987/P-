@@ -39,6 +39,10 @@ string lexer::determine_type(string value) {
     else if (op.find(value) != op.end()) {
         return "op";
     }
+    // Check if it is a graph method
+    else if (graph.find(value) != graph.end()) {
+        return "graph";
+    }
     // Check if it is a number
     // https://stackoverflow.com/questions/7407099/regex-match-numbers-of-variable-length
     else if (regex_match(value, regex("(\\d+)"))) {

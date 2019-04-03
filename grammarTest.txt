@@ -18,7 +18,7 @@ N Assignment Identifier Equality_Left
 N Equality_Left Equal StringArgument | Equal MathArgument
 
 // This one's pretty important
-N StringArgument StringArgument StringArgument | string | StringArgument Identifier | Identifier StringArgument | id
+N StringArgument StringArgument StringArgument | string | id | int | StringArgument MathArgument
 N Identifier id
 N Equal =
 
@@ -36,21 +36,50 @@ N AddOp_Term   AddOp Term
 N MulOp_Factor     MulOp Factor
 N Expr_Close   Expr Close
 
-// This is For Printing
+// This is For functions
 N Delimeter :
+N Num int
 
 // Printing syntax [print : string/id/string/...]
 N Print PFunction Delimeter_SArgument
 N PFunction print
-N Delimeter_SArgument Delimeter StringArgument
-// add the printing graph methods
+N Delimeter_SArgument Delimeter StringArgument | Delimeter PrintGraphFunc | Delimeter GraphFunc
+N PrintGraphFunc PrintGraphFunc PrintGraphFunc | GraphFunc StringArgument | StringArgument GraphFunc 
+
 
 // Check graph object
-N GraphFunc Identifier GraphMethod_Argument
-N GraphMethod_Argument GraphMethod Argument
-N GraphMethod addvertex | addedge | getvertex | isEdge | size | numNeighbours | isVertex
+N GraphFunc Identifier Equal_GraphKey | Identifier GraphMethod_Argument
 
-// addvertex; addEdge; GetVertex; isEdge; Size; numNeighbours; isEdge; isVertex
+// this is for creating the graph object
+N Equal_GraphKey Equal GraphKey
+N GraphKey key_word
+
+// this is graph methods
+N GraphMethod_Argument AddVert ADVrgument | AddEdge EdgeArgument | GetVertex Num | IsVertex Num | IsEdge Num | size | NumNeighbours Num
+
+// this is for add vertex
+N ADVrgument Num StringArgument
+N AddVert addVertex
+
+// this is for add edge
+N AddEdge_AErgument AddEdge EdgeArgument
+N EdgeArgument Num Num
+N AddEdge addEdge
+
+// this is for getVertex
+N GetVertex getVertex
+
+// for isVertex
+N IsVertex isVertex
+
+// for isVertex
+N IsEdge isEdge
+
+
+// for isVertex
+N NumNeighbours numNeighbours
+
+// addvertex; addEdge; GetVertex; isEdge; Size; numNeighbours; isEdge; 
 
 
 

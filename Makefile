@@ -18,6 +18,9 @@ grammar:
 grammartest: grammar
 	./grammar < grammarTest.txt
 
+rich: clean lexer
+	./lexer
+
 clean:
 	rm -rf lexer
 	rm -rf digraphtest
