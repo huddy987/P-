@@ -20,6 +20,10 @@ g addEdge 5 6
 
 g addEdge 6 5
 
+print : g isPath 1 2 3 4 5 5
+
+print : g isWalk 5 4 6 6 7 g isPath 8 8 9 0
+
 print : g getVertex 5 "bruh" 5 "test" hudson richmond richmond
 
 print : g isEdge 5 6 g isEdge 5 6 g isEdge 8 9

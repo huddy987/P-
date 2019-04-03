@@ -38,7 +38,7 @@ N Expr_Close   Expr Close
 
 // This is For functions
 N Delimeter :
-N Num int
+N Num int | id
 
 // Printing syntax [print : string/id/string/...]
 N Print PFunction Delimeter_SArgument
@@ -48,14 +48,20 @@ N PrintGraphFunc PrintGraphFunc PrintGraphFunc | GraphFunc StringArgument | Stri
 
 
 // Check graph object
-N GraphFunc Identifier GraphMethod_Argument
+N GraphFunc Identifier GraphMethod_Argument | Identifier GraphVoids
 
 // this is for creating the graph object
 N Equal_GraphKey Equal GraphKey
 N GraphKey keyword
 
-// this is graph methods
-N GraphMethod_Argument AddVert ADVrgument | AddEdge EdgeArgument | GetVertex Num | IsVertex Num | IsEdge Num | size | NumNeighbours Num
+// void returns. should be their own thing
+N GraphVoids AddVert ADVrgument | AddEdge EdgeArgument
+
+// this is graph methods: NumNum can be an arbitrary length of num
+N GraphMethod_Argument | GetVertex Num | IsVertex Num | IsEdge Num | size | NumNeighbours Num | IsWalk_or_isPath NumNum
+
+// For the iswalk or path: could be int or
+N NumNum NumNum NumNum | int | id
 
 // this is for add vertex
 N ADVrgument Num StringArgument
@@ -74,6 +80,9 @@ N IsVertex isVertex
 
 // for isVertex
 N IsEdge isEdge
+
+// isWalk_or_isPath
+N IsWalk_or_isPath isWalk | isPath
 
 
 // for isVertex
