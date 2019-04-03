@@ -14,11 +14,11 @@ int main() {
 
     Transpiler t = Transpiler(token_test);
 
-    cout << "Begin grammar checking..." << endl;
+    cout << "Checking context free grammar." << endl;
     // return what kind of line each thing is
     queue<string> grammar_queue = populateGrammar(grammar, token_test);
 
-    cout << "Grammar is good..." <<  endl;
+    cout << "Context free grammar is good." <<  endl;
 
     // If it passes the grammar test with no fails, then compile
     t.start();

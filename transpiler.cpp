@@ -401,39 +401,3 @@ string Transpiler::graph() {
     // Of this function
     return "Error in Digraph Object Method";
 }
-
-/*
-int main() {
-    // Example usage of the class
-    lexer token_test;
-
-    token_test = tokenize_file("test.p");
-
-    Transpiler t = Transpiler(token_test);
-
-
-    t.start();
-
-    t.assignment();
-    t.assignment();
-    t.assignment();
-    t.assignment();
-    t.assignment();
-    t.assignment();
-    string out = t.graph();
-    write_to_file(out + ";");
-    out = t.graph();
-    write_to_file(out + ";");
-    out = t.graph();
-    write_to_file(out + ";");
-    out = t.graph();
-    write_to_file(out + ";");
-    t.print();
-    t.print();
-    t.print();
-    t.print();
-    t.print();
-
-    t.end();
-    t.compile();
-}*/

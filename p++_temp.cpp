@@ -26,7 +26,3 @@ cout << "The number of neighbours of vertex 5 are:" << " " << g.numNeighbours(5)
 int test1 = 5;
 int test2 = 6;
 cout << "test1 contains the number:" << " " << test1 << " " << "and test2 contains the number" << " " << test2 << endl;
-int test3 = test1+test1*test1-test2+test2/test1;
-cout << "After performing test1 + test1 * test1 - test2 + test2 / test1, the result is:" << " " << test3 << endl;
-   return 0;
-}
