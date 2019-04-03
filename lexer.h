@@ -35,7 +35,10 @@ class lexer {
         unordered_set<string> func {"print", "add", "subtract", "func"};
         unordered_set<string> op {":", "=", "+", "-", "*", "/"};
         unordered_set<string> bin_op {"!=", "=="};
+
         unordered_set<string> key_words{"graph"};
+        unordered_set<string> keywords{"graph"};
+        
         unordered_set<string> newl {"\n"};
         unordered_set<string> boolean {"TRUE", "FALSE"};
         unordered_set<string> graph {"addVertex", "addEdge", "getVertex", "isEdge", "size", "numNeighbours", "isEdge", "isVertex"};

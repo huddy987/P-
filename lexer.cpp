@@ -52,8 +52,8 @@ string lexer::determine_type(string value) {
     else if(newl.find(value) != newl.end()) {
       return "newl";
     }
-    else if(key_words.find(value) != key_words.end()) {
-        return "key_word";
+    else if(keywords.find(value) != keywords.end()) {
+        return "keyword";
     }
     // Check if it is a nonetype token
     else if(none.find(value) != none.end()) {
