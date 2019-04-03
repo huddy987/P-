@@ -42,12 +42,15 @@ string determineContext(string line, UMSUSS & grammar) {
 
   VS Context {"MathArgument", "Print", "Assignment","GraphFunc","Start"};
   VS ContextReturn {"m", "p","a","g","s"};
-  
+
   for (int i=0; i<Context.size(); i++) {
     if (CYK(line, grammar, Context[i])) return ContextReturn[i];
   }
-  // for invalid
-  return "i";
+  // If invalid, just crash everything:
+  cout << "Terminating. Invalid structure: " << endl;
+  cout << line << endl;
+  exit(EXIT_FAILURE);
+  return "";
 }
 
 
@@ -64,7 +67,7 @@ queue<string> populateGrammar(UMSUSS & grammar, lexer token_test){
 
       // skip empty lines
       if (analyze.empty()) continue;
-      cout << determineContext(analyze, grammar) << ": " << analyze << endl;
+      //cout << determineContext(analyze, grammar) << ": " << analyze << endl;
 
       // determine what the context is: print this and the line
       // cout << determineContext(analyze, grammar) << ": " << analyze << endl;

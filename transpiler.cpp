@@ -126,6 +126,10 @@ string Transpiler::math_expression() {
         final += token_list.next().second;
         token_list.pop();
     }
+    if(previous_int == 0 && !(token_list.next().first == "id" && this->find_id(token_list.next().second, "int"))) {
+        cout << "Fail in math_expression: Tried to use an undefined identifier in an expression" << endl;
+        exit(EXIT_FAILURE);
+    }
     return final;
 }
 
@@ -199,7 +203,7 @@ void Transpiler::assignment() {
         }
     }
     // Try to match with integer/math expression
-    else if(token_list.next().first == "int") {
+    else if(token_list.next().first == "int" || (token_list.next().first == "id" && this->find_id(token_list.next().second, "int"))) {
         // If it's already defined, do not put int in front
         if(this->find_id(id, "int")) {
             final = id + " = ";
@@ -214,7 +218,7 @@ void Transpiler::assignment() {
         final += math_expression();
     }
     // Try to match with string expression
-    else if(token_list.next().first == "string") {
+    else if(token_list.next().first == "string" || (token_list.next().first == "id" && this->find_id(token_list.next().second, "string"))) {
         if(this->find_id(id, "string")) {
             final = id + " = ";
         }
@@ -347,7 +351,7 @@ string Transpiler::graph() {
         string second = token_list.next().second;
         token_list.pop();
         // Open the file, write to it, then close the file
-        cout << id + "." + "addVertex" + "(" + first + "," + second + ")" << endl;
+        //cout << id + "." + "addVertex" + "(" + first + "," + second + ")" << endl;
         final = id + "." + "addVertex" + "(" + first + "," + second + ")";
     }
 
@@ -393,6 +397,8 @@ string Transpiler::graph() {
         exit(EXIT_FAILURE);
     }
     write_to_file(final+";");
+    // If this gets written into our file, it means we made a mistake somewhere with the usage
+    // Of this function
     return "Error in Digraph Object Method";
 }
 
