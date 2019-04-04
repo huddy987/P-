@@ -12,6 +12,7 @@ print : "Does the edge from 6 to 7 exist?" g isEdge 6 7
 print : "5 is a vertex?:" g isVertex 5
 print : "The contents of 5 are:" g getVertex 5
 print : "The number of neighbours of vertex 5 are:" g numNeighbours 5
+# print : g addEdge 3 "asd"
 
 # Examples of variable modification
 test1 = 5

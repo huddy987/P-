@@ -70,7 +70,7 @@ queue<string> populateGrammar(UMSUSS & grammar, lexer token_test){
       //cout << determineContext(analyze, grammar) << ": " << analyze << endl;
 
       // determine what the context is: print this and the line
-      // cout << determineContext(analyze, grammar) << ": " << analyze << endl;
+      cout << determineContext(analyze, grammar) << ": " << analyze << endl;
       grammar_queue.push(determineContext(analyze, grammar));
     }
 
