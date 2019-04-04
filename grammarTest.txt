@@ -9,8 +9,7 @@
 // //////////////////////////////////////////////////////////////////////////////////////
 
 // Start Grammar for Assignment
-N Start Left Equality | int    | id  | Open Expr_Close   | Term MulOp_Factor     | Expr AddOp_Term   | AddOp Term
-
+N Start Left Equality | int | id  | Open Expr_Close   | Term MulOp_Factor     | Expr AddOp_Term   | AddOp Term
 N Equality Equal MathArgument | Equal StringArgument
 
 // Assignment grammar: can assign sterings or numbers
@@ -43,9 +42,9 @@ N Num int | id
 // Printing syntax [print : string/id/string/...]
 N Print PFunction Delimeter_SArgument
 N PFunction print
-N Delimeter_SArgument Delimeter StringArgument | Delimeter PrintGraphFunc | Delimeter GraphFunc
-N PrintGraphFunc PrintGraphFunc PrintGraphFunc | GraphFunc StringArgument | StringArgument GraphFunc
 
+N Delimeter_SArgument Delimeter StringArgument | Delimeter PrintGraphFunc
+N PrintGraphFunc PrintGraphFunc PrintGraphFunc | GraphMethod_Argument StringArgument | StringArgument GraphMethod_Argument
 
 // Check graph object
 N GraphFunc Identifier GraphMethod_Argument | Identifier GraphVoids
@@ -92,10 +91,6 @@ N NumNeighbours numNeighbours
 
 
 
-
-
-
-
 Q
 
 
@@ -114,7 +109,6 @@ id + int
 ( int ) + id
 ( int ) + id
 ( ( int ) + id )
-( oppa gang gang style )
 id = int + ( int + int ) * ( int / int )
 id = int + int - int + int
 id = int + int * int - int / int

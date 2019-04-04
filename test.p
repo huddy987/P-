@@ -14,6 +14,8 @@ g = graph
 
 g addVertex 5 "Hello"
 
+print : g addVertex 5 "Hello"
+
 g addVertex 6 "Goodbye!"
 
 g addEdge 5 6
