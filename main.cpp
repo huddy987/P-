@@ -8,7 +8,7 @@ int main() {
     // Example usage of the class
     lexer token_test;
 
-    token_test = tokenize_file("test2.p");
+    token_test = tokenize_file("code.p");
 
     UMSUSS grammar = makeGrammar("grammarTest.txt");
 
