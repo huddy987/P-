@@ -23,8 +23,6 @@ cout << "Does the edge from 6 to 7 exist?" << " " << g.isEdge(6,7) << endl;
 cout << "5 is a vertex?:" << " " << g.isVertex(5) << endl;
 cout << "The contents of 5 are:" << " " << g.getVertex(5) << endl;
 cout << "The number of neighbours of vertex 5 are:" << " " << g.numNeighbours(5) << endl;
-g.addVertex(3,"asd");
-cout << Error in Digraph Object Method << endl;
 int test1 = 5;
 int test2 = 6;
 cout << "test1 contains the number:" << " " << test1 << " " << "and test2 contains the number" << " " << test2 << endl;

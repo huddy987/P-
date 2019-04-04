@@ -1,6 +1,6 @@
 #include "transpiler.h"
 #include "lexer.h"
-#include "./tests/lextest.cpp"
+#include "grammar.cpp"
 #include <iostream>
 #include <queue>
 
