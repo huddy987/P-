@@ -137,11 +137,22 @@ string Transpiler::math_expression() {
 string Transpiler::string_expression() {
     string final;
     // Check if the input is even a string to begin with
-    if(token_list.next().first != "string") {
+    if(token_list.next().first != "string" && !(token_list.next().first == "id" && this->find_id(token_list.next().second, "string"))) {
         cout << token_list.next().second << endl;
         cout << "Fail in string_expression: Value is not a string" << endl;
         exit(EXIT_FAILURE);
     }
+
+    if(token_list.next().first == "id" && this->find_id(token_list.next().second, "string")) {
+        // Create the next string to insert into the final string
+        string next = token_list.next().second;
+
+        // Pop out the next item
+        token_list.pop();
+
+        return next;
+    }
+
     // Continually read in strings until we reach and endl
     while(token_list.next().first == "string") {
         // Create the next string to insert into the final string
@@ -229,8 +240,25 @@ void Transpiler::assignment() {
             // Add the id to the defined identifiers set.
             this->add_id(id, "string");
         }
-        // Add the string to the assignment
-        final += string_expression();
+        while((token_list.next().first == "id" && this->find_id(token_list.next().second, "string")) || token_list.next().first == "string") {
+            bool was_string = 0;
+            if(token_list.next().first == "string") {
+                was_string = 1;
+            }
+            // Add the string to the assignment
+            final += string_expression();
+
+            if((token_list.next().first == "id" && this->find_id(token_list.next().second, "string")) || token_list.next().first == "string") {
+                if(was_string && token_list.next().first == "string") {
+                    final += " ";
+                } else if(was_string && token_list.next().first == "id") {
+                    final += " \" \" + ";
+                }
+                else {
+                    final += " + \" \" + ";
+                }
+            }
+        }
     }
     else {
         cout << token_list.next().second << endl;
@@ -389,7 +417,7 @@ string Transpiler::graph() {
         return id + "." + "numNeighbours" + "(" + first + ")";
     }
     else if (method == "isWalk") {
-        final += id + "." + "isWalk" + "vector<int>{";
+        final += id + "." + "isWalk" + "(vector<int>{";
         bool startflag = 1;
         while(token_list.next().first == "int" || (token_list.next().first == "id" && this->find_id(token_list.next().second, "int"))) {
             string next = token_list.next().second;
@@ -406,7 +434,7 @@ string Transpiler::graph() {
         return final;
     }
     else if (method == "isPath") {
-        final += id + "." + "isPath" + "vector<int>{";
+        final += id + "." + "isPath" + "(vector<int>{";
         bool startflag = 1;
         while(token_list.next().first == "int" || (token_list.next().first == "id" && this->find_id(token_list.next().second, "int"))) {
             string next = token_list.next().second;
