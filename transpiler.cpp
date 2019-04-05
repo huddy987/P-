@@ -4,7 +4,7 @@
 
 using namespace std;
 
-bool debug = true;
+bool debug = false;
 
 bool supress_print = false;
 
@@ -98,6 +98,13 @@ void Transpiler::read_until_newl() {
     }
 }
 
+void Transpiler::fail_close() {
+    if(!debug){
+         system("rm -rf p++_temp.cpp");
+     }
+     exit(EXIT_FAILURE);
+}
+
 // Continually appends chains of math expressions together
 string Transpiler::math_expression() {
     bool previous_int = 0;
@@ -106,7 +113,7 @@ string Transpiler::math_expression() {
     if(token_list.next().first != "int" && !(token_list.next().first == "id" && this->find_id(token_list.next().second, "int"))) {
         cout << token_list.next().second << endl;
         cout << "Fail in math_expression: Value is not an integer" << endl;
-        exit(EXIT_FAILURE);
+        fail_close();
     }
     while(token_list.next().first == "int" || token_list.next().first == "op" ||
           (token_list.next().first == "id" && this->find_id(token_list.next().second, "int"))) {
@@ -128,7 +135,7 @@ string Transpiler::math_expression() {
     }
     if(previous_int == 0 && !(token_list.next().first == "id" && this->find_id(token_list.next().second, "int"))) {
         cout << "Fail in math_expression: Tried to use an undefined or invalid identifier in an expression" << endl;
-        exit(EXIT_FAILURE);
+        fail_close();
     }
     return final;
 }
@@ -140,7 +147,7 @@ string Transpiler::string_expression() {
     if(token_list.next().first != "string" && !(token_list.next().first == "id" && this->find_id(token_list.next().second, "string"))) {
         cout << token_list.next().second << endl;
         cout << "Fail in string_expression: Value is not a string" << endl;
-        exit(EXIT_FAILURE);
+        fail_close();
     }
 
     if(token_list.next().first == "id" && this->find_id(token_list.next().second, "string")) {
@@ -182,7 +189,7 @@ void Transpiler::assignment() {
     if(token_list.next().first != "id") {
         cout << token_list.next().first << endl;
         cout << "Error in check_assign: Only identifiers can be assigned" << endl;
-        exit(EXIT_FAILURE);
+        fail_close();
     }
     // Store the identifier
     string id = token_list.next().second;
@@ -193,7 +200,7 @@ void Transpiler::assignment() {
     // Check if we are properly using the assignement operator
     if(token_list.next().second != "=") {
         cout << "Error in check_assign: Must use = to assign a variable" << endl;
-        exit(EXIT_FAILURE);
+        fail_close();
     }
 
     // Pop the assignement operator
@@ -204,6 +211,10 @@ void Transpiler::assignment() {
     if(token_list.next().second == "graph") {
         if(this->find_id(id, "graph")) {
             final = id;
+        }
+        else if(this->find_id(id, "int") || this->find_id(id, "string")){ // Prevent ints and strings to be redefined as a graph
+            cout << "Fail: Invalid redefinition. Check your types." << endl;
+            fail_close();
         }
         else {
             // Create the digraph object
@@ -219,7 +230,11 @@ void Transpiler::assignment() {
         if(this->find_id(id, "int")) {
             final = id + " = ";
         }
-        else {
+        else if (this->find_id(id, "string") || this->find_id(id, "graph")){
+            cout << "Fail: Invalid redefinition. Check your types." << endl;
+            fail_close();
+        }
+        else{
             // Add the type and the name to the final expression
             final = "int " + id + " = ";
 
@@ -233,7 +248,11 @@ void Transpiler::assignment() {
         if(this->find_id(id, "string")) {
             final = id + " = ";
         }
-        else {
+        else if(this->find_id(id, "int") || this->find_id(id, "graph")){
+            cout << "Fail: Invalid redefinition. Check your types." << endl;
+            fail_close();
+        }
+        else{
             // Add the type and the name to the final string
             final = "string " + id + " = ";
 
@@ -261,9 +280,8 @@ void Transpiler::assignment() {
         }
     }
     else {
-        cout << token_list.next().second << endl;
-        cout << "Error: Assigning to an invalid token (must be int, string, or graph)" << endl;
-        exit(EXIT_FAILURE);
+        cout << "Error: Assigning to an invalid token (must be int, string, or the graph keyword)" << endl;
+        fail_close();
     }
 
     // Add the ; character at the end of the line
@@ -286,7 +304,7 @@ void Transpiler::print() {
     if(token_list.next().second != "print") {
         cout << "Error in check_print: Function is not print, we got "
         << token_list.next().second << " instead." << endl;
-        exit(EXIT_FAILURE);
+        fail_close();
     }
     // Pop out the print token
     token_list.pop();
@@ -294,7 +312,7 @@ void Transpiler::print() {
     // Make sure the delimiter is the next token
     if(token_list.next().second != ":") {
         cout << "Error in print statement: Invalid syntax." << endl;
-        exit(EXIT_FAILURE);
+        fail_close();
     }
     // Pop out the : token
     token_list.pop();
@@ -304,7 +322,7 @@ void Transpiler::print() {
 
         if(token_list.next().second == "print") {
             cout << "Error: Nested print statements are illegal." << endl;
-            exit(EXIT_FAILURE);
+            fail_close();
         }
 
         else if(token_list.next().first == "string") {
@@ -341,7 +359,7 @@ void Transpiler::print() {
         }
         else {
             cout << "Error in print statement: Cannot print non-string" << token_list.next().second << endl;
-            exit(EXIT_FAILURE);
+            fail_close();
         }
     }
     // Pop out the newl character
@@ -366,7 +384,7 @@ string Transpiler::graph() {
     }
     else {
         cout << "Identifier is undefined or not of type graph: " << token_list.next().second << endl;
-        assert(EXIT_FAILURE);
+        fail_close();
     }
     // Get the method
     string method = token_list.next().second;
@@ -455,7 +473,7 @@ string Transpiler::graph() {
     }
     else {
         cout << "Undefined method for graph: " + method << endl;
-        exit(EXIT_FAILURE);
+        fail_close();
     }
     write_to_file(final+";");
     // If this gets written into our file, it means we made a mistake somewhere with the usage

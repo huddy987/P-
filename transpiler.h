@@ -30,6 +30,9 @@ class Transpiler {
         // Keeps reading newlines in continually
         void read_until_newl();
 
+        // Cleans up files in case of a failure
+        void fail_close();
+
         // Evaluates a math expression
         string math_expression();
 
@@ -41,9 +44,6 @@ class Transpiler {
 
         // Evaluates print function
         void print();
-
-        // Evaluates all of the aboves in attempt to match, returns a blank string otherwise
-        //string check_all();
 
         // Adds a defined id
         void add_id(string id, string type);
