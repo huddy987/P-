@@ -8,7 +8,7 @@
 #include <assert.h> // assert ensures file exists
 #include <regex> // to check for strings
 
-//boost headers
+// boost header for tokenization
 #include <boost/algorithm/string.hpp>
 
 
@@ -32,12 +32,12 @@ class lexer {
         bool isempty();
 
     private:
+        // All these sets are compared against to determine the type of a token
+        // Lookup is O(1) so good data type for this problem
         unordered_set<string> func {"print", "add", "subtract", "func"};
         unordered_set<string> op {":", "=", "+", "-", "*", "/"};
         unordered_set<string> bin_op {"!=", "=="};
-
         unordered_set<string> keywords{"graph"};
-        
         unordered_set<string> newl {"\n"};
         unordered_set<string> boolean {"TRUE", "FALSE"};
         unordered_set<string> graph {"isPath", "isWalk" ,"addVertex", "addEdge", "getVertex", "isEdge", "size", "numNeighbours", "isEdge", "isVertex"};
@@ -52,6 +52,5 @@ class lexer {
 
 // Determines the lexical types of all tokens in a file, and stores it in a lexer object
 lexer tokenize_file(string filename);
-
 
 #endif

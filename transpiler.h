@@ -45,7 +45,7 @@ class Transpiler {
         // Evaluates print function
         void print();
 
-        // Adds a defined id
+        // Adds a defined id to the unordered map
         void add_id(string id, string type);
 
         // Checks if the id is defined
@@ -56,10 +56,13 @@ class Transpiler {
 
     private:
         lexer token_list;
+
         // Key is the identifier name, item is the identifier type
         // This is a bit unintuitive but it is because we only allow uniqie identifier names
         unordered_map<string, string> defined_ids;
-        int line_count = 0;
 };
+
+// Allows us to quickly write to a file with filename "to_write"
+void write_to_file(string to_write);
 
 #endif

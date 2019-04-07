@@ -97,42 +97,46 @@ lexer tokenize_file(string filename) {
        // Used this https://www.geeksforgeeks.org/boostsplit-c-library/
        vector<string> result;
 
-       // Flag that we are creating a string
-       bool strflag = 0;
-
        // String we will match
        string out;
 
+       // Split into individual tokens
        boost::split(result, line, boost::is_any_of(" "));
+
+       // Flag that we are creating a string
+       bool strflag = 0;
+
        for(string token : result) {
-         // Swap into a different mode if we are scanning a string
-         if(token[0] == '\"' && token.back() != '\"') {
-             strflag = 1;
-             out = token;
-             continue;
-         }
-         if(strflag == 1) {
+        // Swap into a different mode if we are scanning a string
+        if(token[0] == '\"' && token.back() != '\"') {
+            strflag = 1;
+            out = token;
+            continue;
+        }
+        if(strflag == 1) {
             out += " " + token;
             if(token.back() == '\"') {
                 // Exit "string" mode
                 strflag = 0;
+
+                // Insert the resulting string into the queue
                 lex.insert(out);
             }
             continue;
         }
-         // Ignore whitespace read in as a token
-         if(token == "") {
+        // Ignore whitespace read in as a token
+        if(token == "") {
            continue;
-         }
-         // Skip comments
-         else if(token == "#") {
+        }
+        // Skip comments
+        else if(token == "#") {
            break;
-         }
-         else {
+        }
+        else {
             out = token;
-         }
-         lex.insert(out);
-     }
+        }
+        lex.insert(out);
+    }
       // Insert a newline token at the end of each line
       lex.insert("\n");
    }
