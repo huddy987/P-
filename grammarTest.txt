@@ -1,13 +1,11 @@
-// this is how we comment this file
-// so the very first char of every line is N to tell the
-//      the grammar maker that it's a Nonterminal being defined
-// if the token starts with a capital letter, its a nonterminal
-// if it starts with a lower case letter, its a terminal
-// these has their own sets in the map with key: "terminal" & "nonTerminal"
-// end the query with Q to mean Quit
-// The test immediately follows the description of the grammar
-NOTE: The grammar has to be in Chomsky Normal Form. If not, the makeGrammar() function in grammar.cpp will throw and crash.
-For this program, Nonterminals are denoted by capital letters. Anything that doesn't start with a capital letter (A-Z) is denoted as a terminal. Every valid line that we want makeGrammar to absorb is started with "N", all else is ignored except for the "Q", which terminates the makeGrammar() function. The first word after the N describes the Nonterminal while the following words describe what the Nonterminal can evaluate to.
+// //////////////////////////////////////////////////////////////////////////////////////
+NOTE: The grammar has to be in Chomsky Normal Form. If not, the makeGrammar() function in grammar.cpp will throw an exception and crash.
+For this program, Nonterminals are denoted by capital letters.
+Anything that doesn't start with a capital letter (A-Z) is interpreted as a terminal.
+Every valid line that we want makeGrammar to absorb is started with "N", all else is ignored except for the "Q", which terminates the makeGrammar() function.
+The first word after the N describes the Nonterminal while the following words describe what the Nonterminal can evaluate to.
+// Source: https://en.wikipedia.org/wiki/CYK_algorithm
+//         https://en.wikipedia.org/wiki/Chomsky_normal_form
 // //////////////////////////////////////////////////////////////////////////////////////
 
 // Start Grammar for Assignment
@@ -88,9 +86,5 @@ N IsWalk_or_isPath isWalk | isPath
 
 // for isVertex
 N NumNeighbours numNeighbours
-
-// addvertex; addEdge; GetVertex; isEdge; Size; numNeighbours; isEdge;
-
-
 
 Q

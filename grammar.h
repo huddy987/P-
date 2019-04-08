@@ -13,19 +13,10 @@
 #include <iostream>
 #include <bits/stdc++.h>
 #include <cassert>
-
-using namespace std;
-
-#include <unordered_set>
-#include <unordered_map>
-#include <vector>
-#include <string>
-#include <iostream>
-#include <bits/stdc++.h>
-#include <cassert>
 #include <utility>
 #include <fstream>
 #include "lexer.h"
+#include "transpiler.h"
 #include <queue>
 
 using namespace std;
@@ -138,7 +129,7 @@ void printUSS(USS stringSet);
  */
 // https://www.xarg.org/tools/cyk-algorithm/
 // https://www.youtube.com/watch?v=VTH1k-xiswM
-bool CYK(string line, unordered_map<string, USS> & grammar, string start = "Start");
+bool CYK(string line, unordered_map<string, USS> & grammar, string start);
 
 // this takes in the tests from grammarRules.txt
 /*

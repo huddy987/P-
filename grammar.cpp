@@ -3,32 +3,9 @@
 // CMPUT 275, Winter 2019
 // Final Assignment: P- programming language
 
-#include <unordered_set>
-#include <unordered_map>
-#include <vector>
-#include <string>
-#include <iostream>
-#include <bits/stdc++.h>
-#include <cassert>
-#include <utility>
-#include <fstream>
-#include "lexer.h"
-#include "transpiler.h"
-#include <queue>
+#include "grammar.h"
 
 using namespace std;
-
-
-/*
- * Input  -
- *        -
- * Output -
- */
-
-
-typedef vector<string> VS;
-typedef unordered_set<string> USS;
-typedef unordered_map<string, USS> UMSUSS;
 
 // this splices a string by whitespace
 // returns a vector where each element is a "word" in the string
@@ -313,7 +290,7 @@ void printUSS(USS stringSet) {
  */
 // https://www.xarg.org/tools/cyk-algorithm/
 // https://www.youtube.com/watch?v=VTH1k-xiswM
-bool CYK(string line, unordered_map<string, USS> & grammar, string start = "Start") {
+bool CYK(string line, unordered_map<string, USS> & grammar, string start) {
     VS split = splicer(line);
     if (split.empty()) {
         return false;

@@ -5,7 +5,7 @@
 
 #include "transpiler.h"
 #include "lexer.h"
-#include "grammar.cpp"
+#include "grammar.h"
 #include <iostream>
 #include <queue>
 

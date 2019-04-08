@@ -1,36 +1,28 @@
-all: grammar transpiler main 
+# Name: Hudson Shykowski & Dale Richmond Naviza
+# ID : 1520045 & 1534579
+# CMPUT 275, Winter 2019
+# Final Assignment: P- programming language
 
-main:
-	g++ main.cpp lexer.cpp transpiler.cpp -std=c++11 -o main
+CC=@g++
+CFLAGS=-c -std=c++11
+LFLAGS=
+OBJS= main main.o transpiler.o lexer.o transpiler.o grammar.o program
 
-transpiler:
-	g++ transpiler.cpp lexer.cpp -std=c++11 -o transpiler
 
-lexer:
-	g++ lexer.cpp tests/lextest.cpp -std=c++11 -o lexer
+main: main.o grammar.o transpiler.o lexer.o
+	$(CC) main.o lexer.o transpiler.o grammar.o -o main $(LFLAGS)
 
-lexer2:
-	g++ lexer.cpp tests/lexhuddy.cpp -std=c++11 -o lexer
+main.o: grammar.o transpiler.o lexer.o
+	$(CC) main.cpp $(CFLAGS) -o main.o
 
-digraphtest:
-	g++ digraph.cpp tests/digraphtest.cpp -std=c++11 -o digraphtest
+grammar.o: transpiler.h	lexer.h grammar.cpp grammar.h
+	$(CC) grammar.cpp $(CFLAGS) -o grammar.o
 
-treetest:
-	g++ tests/treetest.cpp tree.cpp digraph.cpp -std=c++11 -o treetest
+transpiler.o: transpiler.cpp transpiler.h lexer.h
+	$(CC) transpiler.cpp $(CFLAGS) -o transpiler.o
 
-grammar:
-	g++ grammar.cpp -std=c++11 -o grammar
-
-grammartest: grammar
-	./grammar < grammarTest.txt
-
-rich: clean lexer
-	./lexer
+lexer.o: lexer.cpp lexer.h
+	$(CC) lexer.cpp $(CFLAGS) -o lexer.o
 
 clean:
-	rm -rf lexer
-	rm -rf digraphtest
-	rm -rf treetest
-	rm -rf grammar
-	rm -rf transpiler
-	rm -rf main
+	@rm -rf $(OBJS)
