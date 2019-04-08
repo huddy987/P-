@@ -1,8 +1,14 @@
+// Name: Hudson Shykowski & Dale Richmond Naviza
+// ID : 1520045 & 1534579
+// CMPUT 275, Winter 2019
+// Final Assignment: P- programming language
+
+
 
 // Note for this file: The transpiler uses the queue contained in the lexer
 // object for the majority of the functions contained here
 
-#include "transpiler.h"
+#include "./transpiler.h"
 
 using namespace std;
 
@@ -32,16 +38,17 @@ void Transpiler::start() {
     ofstream file;
     file.open("p++_temp.cpp");
 
-    if(!supress_print) {
-        system("echo You may see some files pop up in your current directory...");
-        system("echo Please do not delete them. We will handle that for you!");
+    if (!supress_print) {
+        system\
+            ("echo You may see some files pop up in your current directory.");
+        system\
+            ("echo Please do not delete them. We will handle that for you!");
     }
-
-    file << "// This file should have been deleted. Don't read it please (secret).\n\n";
 
     file << "// Header files: A lot of them so we never fail to compile.\n";
     file << "#include <iostream>\n#include <unordered_map>\n"
-            "#include <vector>\n#include <unordered_set>\n#include <algorithm>\n"
+            "#include <vector>\n#include"
+            " <unordered_set>\n#include <algorithm>\n"
             "#include <set>\n#include <string>\n#include \"digraph.h\"\n\n";
     file << "using namespace std;\n\nint main() {\n";
 
@@ -59,22 +66,22 @@ void Transpiler::end() {
 
 // Compiles the C++ code
 void Transpiler::compile() {
-    if(!supress_print) {
-        system("echo P++ file sucessfully transpiled. Now compiling C++ code...");
+    if (!supress_print) {
+        system\
+            ("echo P++ file sucessfully transpiled. Now compiling C++ code.");
     }
     // Compile the C++ code
     system("g++ p++_temp.cpp digraph.cpp -std=c++11 -o program");
     // Remove the C++ code
-    if(!debug) {
+    if (!debug) {
         system("rm -rf p++_temp.cpp");
+    } else if (!supress_print) {
+        system("echo I##############################################I");
+        system("echo In debug mode, p++_temp.cpp will not be removed.");
+        system("echo I##############################################I");
     }
-    else if(!supress_print){
-        system("echo I############################################################I");
-        system("echo Running in debug mode, p++_temp.cpp will not be removed after.");
-        system("echo I############################################################I");
-     }
 
-    if(!supress_print) {
+    if (!supress_print) {
         system("echo Done! Run ./program");
     }
 }
@@ -92,15 +99,14 @@ bool Transpiler::find_id(string id, string type) {
     if (defined_ids.find(id) != defined_ids.end()) {
         // If the id has an item with the same type, return true
         return (defined_ids.find(id)->second == type) ? true : false;
-    }
-    else {
+    } else {
         return false;
     }
 }
 
 // Continually removes newlines from the lexer queue
 void Transpiler::read_until_newl() {
-    while(token_list.next().first == "newl") {
+    while (token_list.next().first == "newl") {
         token_list.pop();
     }
 }
@@ -108,21 +114,21 @@ void Transpiler::read_until_newl() {
 // Removes the temporary C++ file and closes in case of incorrect
 // usage as defined by the transpiler
 void Transpiler::fail_close() {
-    if(!debug){
-         system("rm -rf p++_temp.cpp");
-     }
-     exit(EXIT_FAILURE);
+    if (!debug) {
+        system("rm -rf p++_temp.cpp");
+    }
+    exit(EXIT_FAILURE);
 }
 
 // Continually appends chains of math expressions together,
 // and returns the resulting math expression
 string Transpiler::math_expression() {
-
     // Final return value
     string final;
 
     // Check if the input is even a math expression to begin with
-    if(token_list.next().first != "int" && !(token_list.next().first == "id" && this->find_id(token_list.next().second, "int"))) {
+    if (token_list.next().first != "int" && !(token_list.next().first == "id"
+        && this->find_id(token_list.next().second, "int"))) {
         cout << token_list.next().second << endl;
         cout << "Fail in math_expression: Value is not an integer" << endl;
         fail_close();
@@ -132,21 +138,21 @@ string Transpiler::math_expression() {
     bool previous_int = 0;
 
     // Continually chain together the expressions if they are valid
-    while(token_list.next().first == "int" || token_list.next().first == "op" ||
-          (token_list.next().first == "id" && this->find_id(token_list.next().second, "int"))) {
-
+    while (token_list.next().first == "int" || token_list.next().first == "op"
+           || (token_list.next().first == "id"
+           && this->find_id(token_list.next().second, "int"))) {
         // If this one is an int, set the flag for next time
-        if(token_list.next().first == "int" || token_list.next().first == "id") {
-            if(previous_int == 1) {
+        if (token_list.next().first == "int" ||
+            token_list.next().first == "id") {
+            if (previous_int == 1) {
                 // Two ints in a row means we are done with this math expression
                 // (Treat the next int as a new math expression)
                 return final;
             } else {
                 previous_int = 1;
             }
-        }
-        // If it isn't a number, it is an operator
-        else if (previous_int == 1) {
+        } else if (previous_int == 1) {
+            // If it isn't a number, it is an operator
             previous_int = 0;
         }
         // Add the string to the return value
@@ -156,8 +162,10 @@ string Transpiler::math_expression() {
         token_list.pop();
     }
     // Error cataching for undefined or invalid identifiers
-    if(previous_int == 0 && !(token_list.next().first == "id" && this->find_id(token_list.next().second, "int"))) {
-        cout << "Fail in math_expression: Tried to use an undefined or invalid identifier in an expression" << endl;
+    if (previous_int == 0 && !(token_list.next().first == "id" &&
+        this->find_id(token_list.next().second, "int"))) {
+        cout << "Fail in math_expression: Tried to use an undefined"
+                " or invalid identifier in an expression" << endl;
         fail_close();
     }
     return final;
@@ -165,35 +173,38 @@ string Transpiler::math_expression() {
 
 // Continually appends chains of strings together into a single string
 string Transpiler::string_expression() {
-
-    // Final return value
+    //  Final return value
     string final;
 
-    // Check if the input is even a string to begin with
-    if(token_list.next().first != "string" && !(token_list.next().first == "id" && this->find_id(token_list.next().second, "string"))) {
+    //  Check if the input is even a string to begin with
+    if (token_list.next().first != "string" &&
+        !(token_list.next().first == "id" &&
+        this->find_id(token_list.next().second, "string"))) {
         cout << token_list.next().second << endl;
         cout << "Fail in string_expression: Value is not a string" << endl;
         fail_close();
     }
 
-    // We handle identifiers first and only once or else we may run into
-    // problems in certain situations
-    if(token_list.next().first == "id" && this->find_id(token_list.next().second, "string")) {
-        // Create the next string to insert into the final string
+    //  We handle identifiers first and only once or else we may run into
+    //  problems in certain situations
+    if (token_list.next().first == "id" &&
+       this->find_id(token_list.next().second, "string")) {
+        //  Create the next string to insert into the final string
         string next = token_list.next().second;
 
-        // Pop out the next item
+        //  Pop out the next item
         token_list.pop();
 
         return next;
     }
 
-    // Continually read in strings until we reach and endl
-    while(token_list.next().first == "string") {
-        // Create the next string to insert into the final string
+    //  Continually read in strings until we reach and endl
+    while (token_list.next().first == "string") {
+        //  Create the next string to insert into the final string
         string next = token_list.next().second;
 
-        // Format the string, remove the first and last " characters to make chaining easier
+        //  Format the string, remove the first and last
+        //  " characters to make chaining easier
         next = next.substr(1, next.size() - 2);
 
         // Add the string chains up
@@ -212,13 +223,14 @@ string Transpiler::string_expression() {
 
 // Writes an assignment to the file
 void Transpiler::assignment() {
-    read_until_newl(); // Pop out all prior newlines
+    read_until_newl();  // Pop out all prior newlines
     string final;   // Final return value
 
     // Check that we are assigning to an identifier
-    if(token_list.next().first != "id") {
+    if (token_list.next().first != "id") {
         cout << token_list.next().first << endl;
-        cout << "Error in check_assign: Only identifiers can be assigned" << endl;
+        cout << "Error in check_assign:"
+                " Only identifiers can be assigned" << endl;
         fail_close();
     }
 
@@ -229,8 +241,9 @@ void Transpiler::assignment() {
     token_list.pop();
 
     // Check if we are properly using the assignement operator
-    if(token_list.next().second != "=") {
-        cout << "Error in check_assign: Must use = to assign a variable" << endl;
+    if (token_list.next().second != "=") {
+        cout << "Error in check_assign: "
+                "Must use = to assign a variable" << endl;
         fail_close();
     }
 
@@ -238,38 +251,38 @@ void Transpiler::assignment() {
     token_list.pop();
 
     // Try to match with digraph object
-    if(token_list.next().second == "graph") {
+    if (token_list.next().second == "graph") {
         // If it is defined, simply restate the graph object
         // This will result in a useless expression, but the resulting
         // C++ code will still be valid.
-        if(this->find_id(id, "graph")) {
+        if (this->find_id(id, "graph")) {
             final = id;
-        }
-        else if(this->find_id(id, "int") || this->find_id(id, "string")) {
+        } else if (this->find_id(id, "int") || this->find_id(id, "string")) {
             // Prevents graph from being reassigned to an int or a string
-            cout << "Error: Attempted to reassign a graph object to an integer or a string" << endl;
+            cout << "Error: Attempted to reassign a "
+                    "graph object to an integer or a string" << endl;
             fail_close();
-        }
-        else {
+        } else {
             // Create the digraph object
             final = "Digraph " + id;
 
             // Add the id to the defined identifiers set
             this->add_id(id, "graph");
         }
-    }
-    // Try to match with integer/math expression
-    else if(token_list.next().first == "int" || (token_list.next().first == "id" && this->find_id(token_list.next().second, "int"))) {
+    } else if (token_list.next().first == "int" ||
+            (token_list.next().first == "id" &&
+            this->find_id(token_list.next().second, "int"))) {
+            // Try to match with integer/math expression
+
         // If it's already defined, do not put int in front
-        if(this->find_id(id, "int")) {
+        if (this->find_id(id, "int")) {
             final = id + " = ";
-        }
-        else if (this->find_id(id, "string") || this->find_id(id, "graph")){
+        } else if (this->find_id(id, "string") || this->find_id(id, "graph")) {
             // Prevents integer from being reassigned to a graph or a string
-            cout << "Error: Attempted to reassign an integer object to a graph or a string" << endl;
+            cout << "Error: Attempted to reassign an integer "
+                    "object to a graph or a string" << endl;
             fail_close();
-        }
-        else{
+        } else {
             // Add the type and the name to the final expression
             final = "int " + id + " = ";
 
@@ -278,19 +291,19 @@ void Transpiler::assignment() {
         }
         // Add the math expression to the final return value
         final += math_expression();
-    }
-    // Try to match with string expression
-    else if(token_list.next().first == "string" || (token_list.next().first == "id" && this->find_id(token_list.next().second, "string"))) {
+    } else if (token_list.next().first == "string" ||
+            (token_list.next().first == "id" &&
+            this->find_id(token_list.next().second, "string"))) {
+            // Try to match with string expression
         // If it's already defined, do not put string in front
-        if(this->find_id(id, "string")) {
+        if (this->find_id(id, "string")) {
             final = id + " = ";
-        }
-        else if(this->find_id(id, "int") || this->find_id(id, "graph")){
+        } else if (this->find_id(id, "int") || this->find_id(id, "graph")) {
             // Prevents string from being reassigned to a graph or an integer
-            cout << "Error: Attempted to reassign a string object to a graph or an integer" << endl;
+            cout << "Error: Attempted to reassign a string "
+                    "object to a graph or an integer" << endl;
             fail_close();
-        }
-        else{
+        } else {
             // Add the type and the name to the final string
             final = "string " + id + " = ";
 
@@ -298,33 +311,36 @@ void Transpiler::assignment() {
             this->add_id(id, "string");
         }
         // While loop for adding a string
-        while((token_list.next().first == "id" && this->find_id(token_list.next().second, "string")) || token_list.next().first == "string") {
-
+        while ((token_list.next().first == "id" &&
+              this->find_id(token_list.next().second, "string")) ||
+              token_list.next().first == "string") {
             // Flag for if the previous value was a string literal
             bool was_string = 0;
 
-            if(token_list.next().first == "string") {
+            if (token_list.next().first == "string") {
                 was_string = 1;
             }
 
             // Add the string to the assignment
             final += string_expression();
 
-            // Handles formatting for string literal and string identifier combinations
-            if((token_list.next().first == "id" && this->find_id(token_list.next().second, "string")) || token_list.next().first == "string") {
-                if(was_string && token_list.next().first == "string") {
+            // Handles formatting for string literal
+            // and string identifier combinations
+            if ((token_list.next().first == "id" &&
+                this->find_id(token_list.next().second, "string")) ||
+                token_list.next().first == "string") {
+                if (was_string && token_list.next().first == "string") {
                     final += " ";
-                } else if(was_string && token_list.next().first == "id") {
+                } else if (was_string && token_list.next().first == "id") {
                     final += " \" \" + ";
-                }
-                else {
+                } else {
                     final += " + \" \" + ";
                 }
             }
         }
-    }
-    else {
-        cout << "Error: Assigning to an invalid token (must be int, string, or the graph keyword)" << endl;
+    } else {
+        cout << "Error: Assigning to an invalid token (must be int, "
+                "string, or the graph keyword)" << endl;
         fail_close();
     }
 
@@ -340,12 +356,12 @@ void Transpiler::assignment() {
 
 // Handles print statement logic
 void Transpiler::print() {
-    read_until_newl(); // Pop out all prior newlines
+    read_until_newl();  // Pop out all prior newlines
 
     // Begin building the output
     string final = "cout";
     // Make sure print is the first token
-    if(token_list.next().second != "print") {
+    if (token_list.next().second != "print") {
         cout << "Error in check_print: Function is not print, we got "
         << token_list.next().second << " instead." << endl;
         fail_close();
@@ -354,7 +370,7 @@ void Transpiler::print() {
     token_list.pop();
 
     // Make sure the delimiter is the next token
-    if(token_list.next().second != ":") {
+    if (token_list.next().second != ":") {
         cout << "Error in print statement: Invalid syntax." << endl;
         fail_close();
     }
@@ -362,43 +378,41 @@ void Transpiler::print() {
     token_list.pop();
 
     // Continually append the strings together
-    while(token_list.next().first != "newl") {
-
-        if(token_list.next().second == "print") {
+    while (token_list.next().first != "newl") {
+        if (token_list.next().second == "print") {
             cout << "Error: Nested print statements are illegal." << endl;
             fail_close();
-        }
-
-        else if(token_list.next().first == "string") {
+        } else if (token_list.next().first == "string") {
             // Add the string to the print statement
             final += " << " + string_expression();
 
             // Add the next print section
-            if(token_list.next().first != "newl") {
+            if (token_list.next().first != "newl") {
                 final += " << \" \"";
             }
-            // We do all the popping inside of string_expression: no need to do it here
-        }
-        else if(token_list.next().first == "id" && (this->find_id(token_list.next().second, "graph"))) {
+        } else if (token_list.next().first == "id" &&
+                  (this->find_id(token_list.next().second, "graph"))) {
             // Check if we are printing a graph method
 
-            final += " << " + graph();    // Add graph argument to the print statement
+            // Add graph argument to the print statement
+            final += " << " + graph();
             // Add the next print section
-            if(token_list.next().first != "newl") {
+            if (token_list.next().first != "newl") {
                 final += " << \" \"";
             }
-        }
-        else if (token_list.next().first == "int" || (token_list.next().first == "id" && (this->find_id(token_list.next().second, "int")))) {
+        } else if (token_list.next().first == "int" ||
+                  (token_list.next().first == "id" &&
+                  (this->find_id(token_list.next().second, "int")))) {
             // Check if we are printing an integer
 
-            final += " << " + math_expression();    // Add integer to the print statement
+            // Add integer to the print statements
+            final += " << " + math_expression();
             // Add the next print section
-            if(token_list.next().first != "newl") {
+            if (token_list.next().first != "newl") {
                 final += " << \" \"";
             }
-        }
-        // If it is an id, and it is defined already, then add this to the print statement
-        else if(token_list.next().first == "id" && (this->find_id(token_list.next().second, "string"))) {
+        } else if (token_list.next().first == "id" &&
+                 (this->find_id(token_list.next().second, "string"))) {
             // Check if we are printing a string identifier
 
             // Add the identifier to the print statement
@@ -408,12 +422,12 @@ void Transpiler::print() {
             token_list.pop();
 
             // Add the next print section
-            if(token_list.next().first != "newl") {
+            if (token_list.next().first != "newl") {
                 final += " << \" \"";
             }
-        }
-        else {
-            cout << "Error in print statement: Cannot print non-string" << token_list.next().second << endl;
+        } else {
+            cout << "Error in print statement: Cannot print "
+                    "non-string" << token_list.next().second << endl;
             fail_close();
         }
     }
@@ -428,17 +442,18 @@ void Transpiler::print() {
 
 // Handles graph and graph methods
 string Transpiler::graph() {
-    read_until_newl(); // Pop out all prior newlines
+    read_until_newl();  // Pop out all prior newlines
 
     string id, final;
 
-    if(token_list.next().first == "id" && this->find_id(token_list.next().second, "graph")) {
+    if (token_list.next().first == "id" &&
+        this->find_id(token_list.next().second, "graph")) {
         // Get the identifier
         id = token_list.next().second;
         token_list.pop();
-    }
-    else {
-        cout << "Identifier is undefined or not of type graph: " << token_list.next().second << endl;
+    } else {
+        cout << "Identifier is undefined or not of type graph: " <<
+                token_list.next().second << endl;
         fail_close();
     }
     // Get the method
@@ -456,99 +471,87 @@ string Transpiler::graph() {
 
         // Open the file, write to it, then close the file
         final = id + "." + "addVertex" + "(" + first + "," + second + ")";
-    }
-
-    else if (method == "addEdge") {
+    } else if (method == "addEdge") {
         string first = token_list.next().second;
         token_list.pop();
         string second = token_list.next().second;
         token_list.pop();
 
         final = id + "." + "addEdge" + "(" + first + "," + second + ")";
-    }
-
-    else if (method == "getVertex") {
+    } else if (method == "getVertex") {
         string first = token_list.next().second;
         token_list.pop();
 
         return id + "." + "getVertex" + "(" + first + ")";
-    }
-
-    else if (method == "isVertex") {
+    } else if (method == "isVertex") {
         string first = token_list.next().second;
         token_list.pop();
 
         return id + "." + "isVertex" + "(" + first + ")";
-    }
-
-    else if (method == "isEdge") {
+    } else if (method == "isEdge") {
         string first = token_list.next().second;
         token_list.pop();
         string second = token_list.next().second;
         token_list.pop();
 
         return id + "." + "isEdge" + "(" + first + "," + second + ")";
-    }
-
-    else if (method == "numNeighbours") {
+    } else if (method == "numNeighbours") {
         string first = token_list.next().second;
         token_list.pop();
 
         return id + "." + "numNeighbours" + "(" + first + ")";
-    }
-    else if (method == "isWalk") {
+    } else if (method == "isWalk") {
         final += id + "." + "isWalk" + "(vector<int>{";
         // Flag for the first iteration of the while loop
         // Makes it so we don't print an extra "," at the start
         bool startflag = 1;
-        while(token_list.next().first == "int" || (token_list.next().first == "id" && this->find_id(token_list.next().second, "int"))) {
+        while (token_list.next().first == "int" ||
+              (token_list.next().first == "id" &&
+              this->find_id(token_list.next().second, "int"))) {
             // While we have a list of integers, add them to the final value
 
             string next = token_list.next().second;
             token_list.pop();
 
-            if(startflag == 1) {
+            if (startflag == 1) {
                 final += next;
                 startflag = 0;
-            }
-            else {
+            } else {
                 final += "," + next;
             }
         }
         final += "})";
         return final;
-    }
-    else if (method == "isPath") {
+    } else if (method == "isPath") {
         final += id + "." + "isPath" + "(vector<int>{";
         // Flag for the first iteration of the while loop
         // Makes it so we don't print an extra "," at the start
         bool startflag = 1;
-        while(token_list.next().first == "int" || (token_list.next().first == "id" && this->find_id(token_list.next().second, "int"))) {
+        while (token_list.next().first == "int" ||
+              (token_list.next().first == "id" &&
+              this->find_id(token_list.next().second, "int"))) {
             // While we have a list of integers, add them to the final value
 
             string next = token_list.next().second;
             token_list.pop();
-            if(startflag == 1) {
+            if (startflag == 1) {
                 final += next;
                 startflag = 0;
-            }
-            else {
+            } else {
                 final += "," + next;
             }
         }
         final += "})";
         return final;
-    }
-    else if (method == "size") {
+    } else if (method == "size") {
         return id + "." + "size()";
-    }
-    else {
+    } else {
         cout << "Undefined method for graph: " + method << endl;
         fail_close();
     }
     write_to_file(final + ";");
-    
-    // If this gets written into our file, it means we made a mistake somewhere with the usage
-    // Of this function
+
+    // If this gets written into our file, it means we
+    // made a mistake somewhere with the usage of this function
     return "Error in Digraph Object Method";
 }

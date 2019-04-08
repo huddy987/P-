@@ -1,3 +1,8 @@
+// Name: Hudson Shykowski & Dale Richmond Naviza
+// ID : 1520045 & 1534579
+// CMPUT 275, Winter 2019
+// Final Assignment: P- programming language
+
 #include <unordered_set>
 #include <unordered_map>
 #include <vector>
@@ -496,7 +501,7 @@ int main() {
     // the value is an unordered set of strings
     //      of the allowed productions
     // The grammar inputted is assumed to be in Chomsky Normal Form
-    
+
     unordered_map<string, USS> grammar = makeGrammar();
     printGrammar(grammar);
     testFunc(grammar);
@@ -504,4 +509,3 @@ int main() {
     cout << "The End" << endl << endl;
     return 0;
 } */
-

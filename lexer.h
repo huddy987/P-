@@ -29,6 +29,8 @@ class lexer {
 
         // Pops the next item off of the queue
         void pop();
+
+        // Checks if the lexer queue is empty
         bool isempty();
 
     private:

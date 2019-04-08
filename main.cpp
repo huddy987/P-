@@ -1,3 +1,8 @@
+// Name: Hudson Shykowski & Dale Richmond Naviza
+// ID : 1520045 & 1534579
+// CMPUT 275, Winter 2019
+// Final Assignment: P- programming language
+
 #include "transpiler.h"
 #include "lexer.h"
 #include "grammar.cpp"
