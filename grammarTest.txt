@@ -6,6 +6,8 @@
 // these has their own sets in the map with key: "terminal" & "nonTerminal"
 // end the query with Q to mean Quit
 // The test immediately follows the description of the grammar
+NOTE: The grammar has to be in Chomsky Normal Form. If not, the makeGrammar() function in grammar.cpp will throw and crash.
+For this program, Nonterminals are denoted by capital letters. Anything that doesn't start with a capital letter (A-Z) is denoted as a terminal. Every valid line that we want makeGrammar to absorb is started with "N", all else is ignored except for the "Q", which terminates the makeGrammar() function. The first word after the N describes the Nonterminal while the following words describe what the Nonterminal can evaluate to.
 // //////////////////////////////////////////////////////////////////////////////////////
 
 // Start Grammar for Assignment
@@ -92,26 +94,3 @@ N NumNeighbours numNeighbours
 
 
 Q
-
-
-
-
-
-
-// These are my test cases
-
-
-||| / n
-(  id  + )
-id + int ^ int * id +
-id + int
-( int )
-( int ) + id
-( int ) + id
-( ( int ) + id )
-id = int + ( int + int ) * ( int / int )
-id = int + int - int + int
-id = int + int * int - int / int
-id = string string string
-id = id string id string id string string string
-Stop

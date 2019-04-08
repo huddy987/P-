@@ -8,6 +8,7 @@
 #include <utility>
 #include <fstream>
 #include "lexer.h"
+#include "transpiler.h"
 #include <queue>
 
 using namespace std;
@@ -411,6 +412,11 @@ void testFunc(unordered_map<string, USS> & grammar) {
 }
 
 // creates the string so CYK can understand it
+
+/*
+ * Input  - lexer object
+ * Output - creates the line that CYK will analyze - its a string
+ */
 string createLine(lexer & token_test) {
   string holder, analyze;
 
@@ -440,15 +446,22 @@ string createLine(lexer & token_test) {
   return analyze;
 }
 
+/*
+ * Input  - line to be analyzed
+ *        - grammar map
+ * Output - a letter that describes what the line is
+ * This is how we add "context" to the context free grammar
+ */
 string determineContext(string line, UMSUSS & grammar) {
-
+  // math expression, print statement, assignment, graph method, a generic start
   VS Context {"MathArgument", "Print", "Assignment","GraphFunc","Start"};
   VS ContextReturn {"m", "p","a","g","s"};
 
+  /// check one the line matches to and output the result
   for (int i=0; i<Context.size(); i++) {
     if (CYK(line, grammar, Context[i])) return ContextReturn[i];
   }
-  // If invalid, just crash everything:
+  // If invalid, just crash everything and print the error
   cout << "Terminating. Invalid structure: " << endl;
   cout << line << endl;
   exit(EXIT_FAILURE);
@@ -456,6 +469,11 @@ string determineContext(string line, UMSUSS & grammar) {
 }
 
 
+/*
+ * Input  - grammar map
+ *        - lexer object token_test
+ * Output - queue of letters describing what that line was
+ */
 queue<string> populateGrammar(UMSUSS & grammar, lexer token_test){
 
     // printGrammar(grammar);
