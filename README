@@ -8,7 +8,7 @@ newl
 null
 bool
 
-Grammer:
+Grammar:
 Terminals: newl,
 
 id := (user_defined)
