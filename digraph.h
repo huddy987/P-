@@ -1,7 +1,7 @@
 // Name: Hudson Shykowski & Dale Richmond Naviza
 // ID : 1520045 & 1534579
 // CMPUT 275, Winter 2019
-// Assignment 2 Part 1: Driving Route Finder
+// Final Assignment: P- programming language
 
 #ifndef _GRAPH_H_
 #define _GRAPH_H_
@@ -66,7 +66,7 @@ public:
   bool isPath(vector<int> path);
 
 private:
-  unordered_map<int, unordered_set<int>> nbrs;
+  unordered_map<int, unordered_set<int> > nbrs;
   // Maps a vertex number to its contents (a string)
   unordered_map<int, string> vertex_map;
 };

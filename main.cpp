@@ -1,5 +1,11 @@
+// Name: Hudson Shykowski & Dale Richmond Naviza
+// ID : 1520045 & 1534579
+// CMPUT 275, Winter 2019
+// Final Assignment: P- programming language
+
 #include "transpiler.h"
 #include "lexer.h"
+#include "grammar.h"
 #include <iostream>
 #include <queue>
 
@@ -7,16 +13,20 @@ int main() {
     // Example usage of the class
     lexer token_test;
 
-    token_test = tokenize_file("test.p");
+    token_test = tokenize_file("code.p");
+
+    UMSUSS grammar = makeGrammar("grammarTest.txt");
 
     Transpiler t = Transpiler(token_test);
 
-    // TODO Something with grammer here
+    cout << "Checking context free grammar." << endl;
+    // return what kind of line each thing is
+    queue<string> grammar_queue = populateGrammar(grammar, token_test);
 
+    cout << "Context free grammar is good." <<  endl;
+
+    // If it passes the grammar test with no fails, then compile
     t.start();
-
-    queue<string> grammar_queue;
-    // TODO: Get a proper queue from the grammar thing
 
     while(!grammar_queue.empty()) {
         if(grammar_queue.front() == "p") {
@@ -27,6 +37,10 @@ int main() {
         }
         else if(grammar_queue.front() == "g") {
             t.graph();
+        } else {
+            cout << "Invalid Syntax detected." << endl;
+            t.end();
+            exit(EXIT_FAILURE);
         }
         grammar_queue.pop();
     }

@@ -1,4 +1,4 @@
-#include "lexer.h"
+#include "./lexer.h"
 #include <iostream>
 
 using namespace std;
@@ -28,16 +28,20 @@ bool lexer::isempty() {
 // Returns lexical "type"
 string lexer::determine_type(string value) {
     // Check if it is an identifier
-    if(func.find(value) != func.end()) {
+    if (func.find(value) != func.end()) {
         return "func";
     }
     // Check if it is a binary operator
-    else if(bin_op.find(value) != bin_op.end()) {
+    else if (bin_op.find(value) != bin_op.end()) {
         return "bin_op";
     }
     // Check if it is an operator
     else if (op.find(value) != op.end()) {
         return "op";
+    }
+    // Check if it is a graph method
+    else if (graph.find(value) != graph.end()) {
+        return "graph";
     }
     // Check if it is a number
     // https://stackoverflow.com/questions/7407099/regex-match-numbers-of-variable-length
@@ -45,22 +49,22 @@ string lexer::determine_type(string value) {
         return "int";
     }
     // Check if it is a new line token
-    else if(newl.find(value) != newl.end()) {
+    else if (newl.find(value) != newl.end()) {
       return "newl";
     }
-    else if(keywords.find(value) != keywords.end()) {
+    else if (keywords.find(value) != keywords.end()) {
         return "keyword";
     }
     // Check if it is a nonetype token
-    else if(none.find(value) != none.end()) {
+    else if (none.find(value) != none.end()) {
       return "none";
     }
     // Check if it is a boolean token
-    else if(boolean.find(value) != boolean.end()) {
+    else if (boolean.find(value) != boolean.end()) {
       return "bool";
     }
     // Check if it is a string token
-    else if(regex_match(value, regex("(\".*.?\")"))) {
+    else if (regex_match(value, regex("(\".*.?\")"))) {
       return "string";
     }
     // If it reaches this, it is an identifier
@@ -69,20 +73,21 @@ string lexer::determine_type(string value) {
     }
 }
 
-// Determines the lexical types of all tokens in a file, and stores it in a lexer object
+// Determines the lexical types of all tokens in a file,
+// and stores it in a lexer object
 lexer tokenize_file(string filename) {
     // Create a file stream object
-   ifstream stream;
-   // Open the file
-   stream.open(filename);
-   // Assert that the file exists
-   assert(stream);
-   // Create line object
-   string line;
-   // Create a tokens object which we will build upon
-   lexer lex;
-   // Continually read in lines to build the queue until we reach EOF
-   while (true) {
+    ifstream stream;
+    // Open the file
+    stream.open(filename);
+    // Assert that the file exists
+    assert(stream);
+    // Create line object
+    string line;
+    // Create a tokens object which we will build upon
+    lexer lex;
+    // Continually read in lines to build the queue until we reach EOF
+    while (true) {
        // Read in a line
        getline(stream, line);
        // Check for EOF
@@ -93,48 +98,49 @@ lexer tokenize_file(string filename) {
        // Used this https://www.geeksforgeeks.org/boostsplit-c-library/
        vector<string> result;
 
-       // Flag that we are creating a string
-       bool strflag = 0;
-
        // String we will match
        string out;
 
+       // Split into individual tokens
        boost::split(result, line, boost::is_any_of(" "));
-       for(string token : result) {
-         // Swap into a different mode if we are scanning a string
-         if(token[0] == '\"' && token.back() != '\"') {
-             strflag = 1;
-             out = token;
-             continue;
-         }
-         if(strflag == 1) {
+
+       // Flag that we are creating a string
+       bool strflag = 0;
+
+       for (string token : result) {
+        // Swap into a different mode if we are scanning a string
+        if (token[0] == '\"' && token.back() != '\"') {
+            strflag = 1;
+            out = token;
+            continue;
+        }
+        if (strflag == 1) {
             out += " " + token;
-            if(token.back() == '\"') {
+            if (token.back() == '\"') {
                 // Exit "string" mode
                 strflag = 0;
+
+                // Insert the resulting string into the queue
                 lex.insert(out);
             }
             continue;
         }
-         // Ignore whitespace read in as a token
-         if(token == "") {
+        // Ignore whitespace read in as a token
+        if (token == "") {
            continue;
-         }
-         // Skip comments
-         else if(token == "#") {
+        } else if (token == "#") {  // Skip comments
            break;
-         }
-         else {
+        } else {
             out = token;
-         }
-         lex.insert(out);
-     }
+        }
+        lex.insert(out);
+    }
       // Insert a newline token at the end of each line
       lex.insert("\n");
-   }
+    }
 
-   // Close the file
-   stream.close();
+    // Close the file
+    stream.close();
 
-   return lex;
+    return lex;
 }

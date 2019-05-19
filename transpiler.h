@@ -1,3 +1,8 @@
+// Name: Hudson Shykowski & Dale Richmond Naviza
+// ID : 1520045 & 1534579
+// CMPUT 275, Winter 2019
+// Final Assignment: P- programming language
+
 #ifndef _GRAMMER_H_
 #define _GRAMMER_H_
 
@@ -30,6 +35,9 @@ class Transpiler {
         // Keeps reading newlines in continually
         void read_until_newl();
 
+        // Cleans up files in case of a failure
+        void fail_close();
+
         // Evaluates a math expression
         string math_expression();
 
@@ -42,10 +50,7 @@ class Transpiler {
         // Evaluates print function
         void print();
 
-        // Evaluates all of the aboves in attempt to match, returns a blank string otherwise
-        //string check_all();
-
-        // Adds a defined id
+        // Adds a defined id to the unordered map
         void add_id(string id, string type);
 
         // Checks if the id is defined
@@ -56,10 +61,13 @@ class Transpiler {
 
     private:
         lexer token_list;
+
         // Key is the identifier name, item is the identifier type
         // This is a bit unintuitive but it is because we only allow uniqie identifier names
         unordered_map<string, string> defined_ids;
-        int line_count = 0;
 };
+
+// Allows us to quickly write to a file with filename "to_write"
+void write_to_file(string to_write);
 
 #endif

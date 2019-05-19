@@ -1,24 +1,23 @@
-// this is how we comment this file
-// so the very first char of every line is N to tell the
-//      the grammar maker that it's a Nonterminal being defined
-// if the token starts with a capital letter, its a nonterminal
-// if it starts with a lower case letter, its a terminal
-// these has their own sets in the map with key: "terminal" & "nonTerminal"
-// end the query with Q to mean Quit
-// The test immediately follows the description of the grammar
+// //////////////////////////////////////////////////////////////////////////////////////
+NOTE: The grammar has to be in Chomsky Normal Form. If not, the makeGrammar() function in grammar.cpp will throw an exception and crash.
+For this program, Nonterminals are denoted by capital letters.
+Anything that doesn't start with a capital letter (A-Z) is interpreted as a terminal.
+Every valid line that we want makeGrammar to absorb is started with "N", all else is ignored except for the "Q", which terminates the makeGrammar() function.
+The first word after the N describes the Nonterminal while the following words describe what the Nonterminal can evaluate to.
+// Source: https://en.wikipedia.org/wiki/CYK_algorithm
+//         https://en.wikipedia.org/wiki/Chomsky_normal_form
 // //////////////////////////////////////////////////////////////////////////////////////
 
 // Start Grammar for Assignment
-N Start Left Equality | int    | id  | Open Expr_Close   | Term MulOp_Factor     | Expr AddOp_Term   | AddOp Term
-
+N Start Left Equality | int | id  | Open Expr_Close   | Term MulOp_Factor     | Expr AddOp_Term   | AddOp Term
 N Equality Equal MathArgument | Equal StringArgument
 
 // Assignment grammar: can assign sterings or numbers
-N Assignment Identifier Equality_Left
+N Assignment Identifier Equality_Left | Identifier Equal_GraphKey
 N Equality_Left Equal StringArgument | Equal MathArgument
 
 // This one's pretty important
-N StringArgument StringArgument StringArgument | string | StringArgument Identifier | Identifier StringArgument | id
+N StringArgument StringArgument StringArgument | string | id | int | StringArgument MathArgument | StringArgument PrintGraphFunc
 N Identifier id
 N Equal =
 
@@ -26,7 +25,7 @@ N Equal =
 N MathArgument   int    | id  | Open Expr_Close   | Term MulOp_Factor     | Expr AddOp_Term   | AddOp Term
 N Expr     int    | id  | Open Expr_Close     | Term MulOp_Factor     | Expr AddOp_Term   | AddOp Term
 N Term     int    | id  | Open Expr_Close     | Term MulOp_Factor
-N Factor   int    | id  | Open Expr_Close   
+N Factor   int    | id  | Open Expr_Close
 N Primary      int    | id  | Open Expr_Close
 N AddOp    +     | -
 N MulOp    *     | /
@@ -36,50 +35,56 @@ N AddOp_Term   AddOp Term
 N MulOp_Factor     MulOp Factor
 N Expr_Close   Expr Close
 
-// This is For Printing
+// This is For functions
 N Delimeter :
+N Num int | id
 
 // Printing syntax [print : string/id/string/...]
 N Print PFunction Delimeter_SArgument
 N PFunction print
-N Delimeter_SArgument Delimeter StringArgument
-// add the printing graph methods
+
+N Delimeter_SArgument Delimeter StringArgument | Delimeter PrintGraphFunc
+N PrintGraphFunc PrintGraphFunc PrintGraphFunc | GraphMethod_Argument StringArgument | StringArgument GraphMethod_Argument
 
 // Check graph object
-N GraphFunc Identifier GraphMethod_Argument
-N GraphMethod_Argument GraphMethod Argument
-N GraphMethod addvertex | addedge | getvertex | isEdge | size | numNeighbours | isVertex
+N GraphFunc Identifier GraphMethod_Argument | Identifier GraphVoids
 
-// addvertex; addEdge; GetVertex; isEdge; Size; numNeighbours; isEdge; isVertex
+// this is for creating the graph object
+N Equal_GraphKey Equal GraphKey
+N GraphKey keyword
+
+// void returns. should be their own thing
+N GraphVoids AddVert ADVrgument | AddEdge EdgeArgument
+
+// this is graph methods: NumNum can be an arbitrary length of num
+N GraphMethod_Argument | GetVertex Num | IsVertex Num | IsEdge Num | size | NumNeighbours Num | IsWalk_or_isPath NumNum
+
+// For the iswalk or path: could be int or
+N NumNum NumNum NumNum | int | id
+
+// this is for add vertex
+N ADVrgument Num StringArgument
+N AddVert addVertex
+
+// this is for add edge
+N AddEdge_AErgument AddEdge EdgeArgument
+N EdgeArgument Num Num
+N AddEdge addEdge
+
+// this is for getVertex
+N GetVertex getVertex
+
+// for isVertex
+N IsVertex isVertex
+
+// for isVertex
+N IsEdge isEdge
+
+// isWalk_or_isPath
+N IsWalk_or_isPath isWalk | isPath
 
 
-
-
-
-
+// for isVertex
+N NumNeighbours numNeighbours
 
 Q
-
-
-
-
-
-
-// These are my test cases
-
-
-||| / n
-(  id  + )
-id + int ^ int * id +
-id + int
-( int )
-( int ) + id
-( int ) + id
-( ( int ) + id )
-( oppa gang gang style )
-id = int + ( int + int ) * ( int / int )
-id = int + int - int + int
-id = int + int * int - int / int
-id = string string string
-id = id string id string id string string string
-Stop

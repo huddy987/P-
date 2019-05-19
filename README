@@ -1,25 +1,61 @@
-Types of tokens:
-int
-str
-op
-id
-boolean
-newl
-null
-bool
+Name: Hudson Shykowski & Dale Richmond Naviza
+ID : 1520045 & 1534579
+CMPUT 275, Winter 2019
+Final Assignment: P- programming language
 
-Grammar:
-Terminals: newl,
+Dependencies:
+    - Boost version 1.66.0 is required to compile this program
 
-id := (user_defined)
-op := :|=|+|-|*|/| DONE
-newl := "\n" DONE
-num := 0|1|2|3|4|5|6|7|8|9 DONE
-bool := FALSE|TRUE DONE
-str := regex("('.*.?')") // Anything inside of '' DONE
+Description:
 
-func := print|
-print := : id|num|bool|str|none newl DONE (can be expanded on later)
-assign := id = id|num|bool|str newl
+    The P- programming language is a simple language built with the intent
+    of teaching new programmers the basics of graphs. The three data types in
+    P- are integers, strings and graphs. There are many graph functions,
+    all of which are defined in digraph.h.
 
-math := RICHMOND
+    In order to create this programming language, 3 main components were required.
+
+    1. Lexer
+        The lexer simply splits the P- source code file into it's tokens.
+        It then classifies every token into it's respective lexical type.
+        Any token that does not fit a given lexical type is assumed to be
+        an identifier
+
+    2. Context free grammar parser
+        The context free grammar checking is implemented according to the Cocke–Younger–Kasami algorithm. makeGrammar() creates an unordered
+        map that describes the grammar in Chomsky Normal Form. The function
+        CYK() in grammar.cpp checks if a given line is valid according to
+        different grammars for diffent "Start" nonterminals. More information
+        about the grammar syntax is in grammarTest.txt which is the grammar
+        that is fed into the program
+
+    3. Transpiler
+        Once the grammar has been verified, the transpiler converts the
+        P- code into C++ code. As it converts the code line by line,
+        it builds a list of defined identifiers which it uses to ensure
+        that undeclared identifiers are not used illegally, and that
+        type reassignment does not occur. Once the entire P- code has been converted,
+        the C++ compiler converts the C++ code into an executable.
+
+Running Instructions:
+
+    1. To compile and link, run "make"
+    2. Run the executable exercise4 with "./main"
+    3. If the code is valid syntax, "./main" will generate an
+       executable called "program". Run "./program" to see the result
+       of your P- program
+    4. To delete the executables, run "make clean"
+
+
+Note and assumptions:
+
+    - Most of the code in digraph.cpp and digraph.h was taken from eclass
+      and so was not commented. However, the digraph class was augmented
+      to include a "string" value contained in each node, and comments
+      related to this was included in digraph.cpp and digraph.h
+
+    - The else if statements in lexer.cpp were left on their own lines
+      in order to improve readability of the code
+
+    - A lot of research was done for the Context Free Grammar. The sources
+      were cited above the functions where they were implemented.

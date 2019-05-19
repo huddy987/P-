@@ -1,25 +1,11 @@
-#include <unordered_set>
-#include <unordered_map>
-#include <vector>
-#include <string>
-#include <iostream>
-#include <bits/stdc++.h>
-#include <cassert>
-#include <utility>
-#include <fstream>
+// Name: Hudson Shykowski & Dale Richmond Naviza
+// ID : 1520045 & 1534579
+// CMPUT 275, Winter 2019
+// Final Assignment: P- programming language
+
+#include "grammar.h"
 
 using namespace std;
-
-
-/*
- * Input  -
- *        -
- * Output -
- */
-
-
-typedef vector<string> VS;
-typedef unordered_set<string> USS;
 
 // this splices a string by whitespace
 // returns a vector where each element is a "word" in the string
@@ -304,7 +290,7 @@ void printUSS(USS stringSet) {
  */
 // https://www.xarg.org/tools/cyk-algorithm/
 // https://www.youtube.com/watch?v=VTH1k-xiswM
-bool CYK(string line, unordered_map<string, USS> & grammar, string start = "Start") {
+bool CYK(string line, unordered_map<string, USS> & grammar, string start) {
     VS split = splicer(line);
     if (split.empty()) {
         return false;
@@ -407,6 +393,94 @@ void testFunc(unordered_map<string, USS> & grammar) {
     }
 }
 
+// creates the string so CYK can understand it
+
+/*
+ * Input  - lexer object
+ * Output - creates the line that CYK will analyze - its a string
+ */
+string createLine(lexer & token_test) {
+  string holder, analyze;
+
+  // if the think is a graph method pass in the mothod
+  // maybe make the different grammars for print, graph, and  math
+
+
+      // while we havent hit the end of line
+      while (token_test.next().first != "newl") {
+        // take in the first token
+        string holder = token_test.next().first;
+        if (holder == "op") {
+          // if it's an operation, use the operator
+          holder = token_test.next().second;
+        } else if (holder == "func") {
+          // if it's a func, use the function
+          holder = token_test.next().second;
+        } else if (holder == "graph") {
+          // if it's a func, use the function
+          holder = token_test.next().second;
+        }
+        // concatenate the strings
+        analyze = analyze + " " + holder;
+        // move on to the next token
+        token_test.pop();
+      } token_test.pop();
+  return analyze;
+}
+
+/*
+ * Input  - line to be analyzed
+ *        - grammar map
+ * Output - a letter that describes what the line is
+ * This is how we add "context" to the context free grammar
+ */
+string determineContext(string line, UMSUSS & grammar) {
+  // math expression, print statement, assignment, graph method, a generic start
+  VS Context {"MathArgument", "Print", "Assignment","GraphFunc","Start"};
+  VS ContextReturn {"m", "p","a","g","s"};
+
+  /// check one the line matches to and output the result
+  for (int i=0; i<Context.size(); i++) {
+    if (CYK(line, grammar, Context[i])) return ContextReturn[i];
+  }
+  // If invalid, just crash everything and print the error
+  cout << "Terminating. Invalid structure: " << endl;
+  cout << line << endl;
+  exit(EXIT_FAILURE);
+  return "";
+}
+
+
+/*
+ * Input  - grammar map
+ *        - lexer object token_test
+ * Output - queue of letters describing what that line was
+ */
+queue<string> populateGrammar(UMSUSS & grammar, lexer token_test){
+
+    // printGrammar(grammar);
+    string analyze;
+    queue<string> grammar_queue;
+
+    // Example usage of the class
+    while(!token_test.isempty()) {
+      // make the string to be analyzed by CYK
+      analyze = createLine(token_test);
+
+      // skip empty lines
+      if (analyze.empty()) continue;
+      //cout << determineContext(analyze, grammar) << ": " << analyze << endl;
+
+      // determine what the context is: print this and the line
+      // cout << determineContext(analyze, grammar) << ": " << analyze << endl;
+      grammar_queue.push(determineContext(analyze, grammar));
+    }
+
+    // Comparing tokens
+    return grammar_queue;
+}
+
+
 
 
 
@@ -422,7 +496,7 @@ int main() {
     // the value is an unordered set of strings
     //      of the allowed productions
     // The grammar inputted is assumed to be in Chomsky Normal Form
-    
+
     unordered_map<string, USS> grammar = makeGrammar();
     printGrammar(grammar);
     testFunc(grammar);
@@ -430,4 +504,3 @@ int main() {
     cout << "The End" << endl << endl;
     return 0;
 } */
-

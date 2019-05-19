@@ -1,7 +1,7 @@
 // Name: Hudson Shykowski & Dale Richmond Naviza
 // ID : 1520045 & 1534579
 // CMPUT 275, Winter 2019
-// Assignment 2 Part 1: Driving Route Finder
+// Final Assignment: P- programming language
 
 #include "digraph.h"
 
@@ -15,7 +15,7 @@ void Digraph::addVertex(int v, string contents) {
 }
 
 void Digraph::addEdge(int u, int v) {
-  addVertex(v, " ");  //If the vertex DNE, insert it with an empty string
+  addVertex(v, " ");  // If the vertex DNE, insert it with an empty string
   nbrs[u].insert(v);  // will also add u to nbrs if it was not there already
 }
 // Returns the contents of a vertex
@@ -52,7 +52,7 @@ int Digraph::size() {
 
 vector<int> Digraph::vertices() {
   vector<int> v;
-  for (unordered_map<int, unordered_set<int>>::const_iterator it = nbrs.begin();
+  for (unordered_map<int, unordered_set<int> >::const_iterator it = nbrs.begin();
     it != nbrs.end(); it++) {
       v.push_back(it->first);
     }
